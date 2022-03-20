@@ -1,13 +1,22 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+import OpenOrderHeader from '../components/header/OpenOrderHeader';
 
 
 const OpenOrderScreen =()=> {
   return (
-    <View>
-      <Text>OpenOrderScreen</Text>
+    <View style={styles.conatainer}>
+      <OpenOrderHeader/>
     </View>
   )
 }
 
 export default OpenOrderScreen;
+
+const  styles = StyleSheet.create({
+    conatainer:{
+        flex:1,
+        backgroundColor:'#E2E2E2'
+        
+    }
+})
