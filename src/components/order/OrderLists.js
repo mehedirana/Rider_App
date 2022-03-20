@@ -17,24 +17,11 @@ const OrderLists = ({navigation, data}) => {
           </Text>
           <Text
             style={[
-              {
-                backgroundColor:
-                  item?.status === 'PENDING'
-                    ? '#FFF1CE'
-                    : item?.status === 'CANCELED'
-                    ? '#FED4D1'
-                    : '#F4F4F4',
-                color:
-                  item?.status === 'PENDING'
-                    ? '#B76300'
-                    : item?.status === 'CANCELED'
-                    ? '#C81509'
-                    : '#848484',
-              },
+        
               FONTS.small,
               styles.orderStatusTxt,
             ]}>
-            {item?.status}
+            Open
           </Text>
         </View>
         <Text style={[FONTS.bodyMedium, {color: COLORS.black}]}>
@@ -42,29 +29,6 @@ const OrderLists = ({navigation, data}) => {
         </Text>
         <Text style={{color:'#555555', marginTop:6}}>{item?.deliveryLocation}</Text>
         <Text style={{color:COLORS.black, marginTop:6}}>017XX XXX XXX</Text>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={[{color: COLORS.gray}]}>{item.totallItems} Items</Text>
-          <View style={styles.dotIconContainer}>
-            <Svg
-              width={5}
-              height={5}
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <Path
-                d="M2.753 4.264a1.97 1.97 0 0 1-1.02-.272 2.122 2.122 0 0 1-.738-.739 1.97 1.97 0 0 1-.273-1.02c0-.376.091-.716.273-1.02.184-.308.43-.553.738-.734a1.945 1.945 0 0 1 1.02-.277c.376 0 .716.092 1.02.277.308.181.553.426.735.734.184.304.277.644.277 1.02 0 .372-.093.712-.277 1.02a2.083 2.083 0 0 1-.734.739 1.955 1.955 0 0 1-1.02.272Z"
-                fill="#242823"
-              />
-            </Svg>
-          </View>
-          <View style={styles.grandTotalCard}>
-            <View>
-              <DollerIcon height={11} width={11} color={COLORS.black} />
-            </View>
-            <Text style={[styles.grandTotalTxt, FONTS.smallBold]}>
-              {item?.grandTotall}
-            </Text>
-          </View>
-        </View>
         <View style={styles.placeHolderContainer} />
         <View style={styles.footerContainer}>
           <TouchableOpacity onPress={() => handleCancelOrder(item)}>
@@ -77,7 +41,7 @@ const OrderLists = ({navigation, data}) => {
             disabled={item.status === 'Cancelled' ? true : false}>
             <Text
               style={[
-                FONTS.bodyParagraphBold,
+                FONTS.button,
                 {
                   color: COLORS.primary,
                 },
@@ -131,8 +95,10 @@ const styles = StyleSheet.create({
   },
   orderStatusTxt: {
     paddingHorizontal: 8,
-    paddingVertical: 2,
+    paddingVertical: 3,
     borderRadius: 9,
+    backgroundColor: '#FFF1CE',
+    color: '#B76300'
   },
   dotIconContainer: {
     justifyContent: 'center',
@@ -159,8 +125,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 11,
-    borderWidth: 0.3,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
     backgroundColor:'#B7FFD0'
     
   },

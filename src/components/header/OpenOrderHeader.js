@@ -24,6 +24,6 @@ const styles = StyleSheet.create({
     marginTop: 46,
     marginHorizontal: 22,
     flexDirection:'row',
-    backgroundColor: '#E2E2E2'
+    backgroundColor: COLORS.lightGray50
   },
 });
