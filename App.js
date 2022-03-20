@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, View, StatusBar} from 'react-native';
+import StackNavigation from './src/navigation/stack-navigation/StackNavigation';
 
 const App = () => {
   return (
@@ -9,10 +10,7 @@ const App = () => {
         backgroundColor={'transparent'}
         translucent
       />
-      <Text>skjfdsfds</Text>
-      <Text>skjfdsfds</Text>
-      <Text>skjfdsfds</Text>
-      <Text>skjfdsfds</Text>
+      <StackNavigation />
     </View>
   );
 };
