@@ -1,6 +1,7 @@
 import React from 'react';
 import Svg, {Path, Rect, Circle, Mask} from 'react-native-svg';
-import {COLORS} from '../../../constants';
+import { COLORS } from '../../../styles/theme';
+
 
 export const DollerIcon = ({color, height, width}) => {
   return (
