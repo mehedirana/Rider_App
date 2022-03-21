@@ -199,7 +199,7 @@ const OrderDetailsScreen = () => {
                 Payment Information
               </Text>
               <Text style={[{ color: COLORS.primary, marginRight: 5 }, FONTS.xtraSmall]}>
-                Collect Cash from the customer
+                Collect Cash from customer
               </Text>
             </View>
             <View style={{
