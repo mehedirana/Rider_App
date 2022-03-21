@@ -1,43 +1,47 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { COLORS, FONTS } from '../../styles/theme';
-import {DollerIcon} from '../../assets/images/svg/DollerIcon';
-import Svg, {Path} from 'react-native-svg';
 
-const OrderLists = ({navigation, data}) => {
-  const RenderAllOrdersList = ({item, index}) => {
-      console.log(item);
+
+const OrderLists = ({ navigation, data }) => {
+
+  const handleAccept = (item) => {
+    console.log('============>', item)
+    navigation.navigate('OrderDetails')
+  }
+
+  const RenderAllOrdersList = ({ item, index }) => {
+    console.log(item);
     return (
-      <TouchableOpacity
-        onPress={() => handleCardPress(item)}
+      <View
         style={styles.card}>
         <View style={styles.headerContainer}>
-          <Text style={[{color: COLORS.gray}, FONTS.xtraSmall]}>
+          <Text style={[{ color: COLORS.gray }, FONTS.xtraSmall]}>
             {item?.deliveryTime}
           </Text>
           <Text
             style={[
-        
+
               FONTS.small,
               styles.orderStatusTxt,
             ]}>
             Open
           </Text>
         </View>
-        <Text style={[FONTS.bodyMedium, {color: COLORS.black}]}>
+        <Text style={[FONTS.bodyMedium, { color: COLORS.black }]}>
           Order # {item?.orderId}
         </Text>
-        <Text style={{color:'#555555', marginTop:6}}>{item?.deliveryLocation}</Text>
-        <Text style={{color:COLORS.black, marginTop:6}}>017XX XXX XXX</Text>
+        <Text style={{ color: '#555555', marginTop: 6 }}>{item?.deliveryLocation}</Text>
+        <Text style={{ color: COLORS.black, marginTop: 6 }}>017XX XXX XXX</Text>
         <View style={styles.placeHolderContainer} />
         <View style={styles.footerContainer}>
           <TouchableOpacity onPress={() => handleCancelOrder(item)}>
-            <Text style={[FONTS.bodyParagraphBold, {color: COLORS.red}]}>
-            DECLINE
+            <Text style={[FONTS.bodyParagraphBold, { color: COLORS.red }]}>
+              DECLINE
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => handleTrackOrder(item)}
+            onPress={() => handleAccept(item)}
             disabled={item.status === 'Cancelled' ? true : false}>
             <Text
               style={[
@@ -51,7 +55,7 @@ const OrderLists = ({navigation, data}) => {
             </Text>
           </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+      </View>
     );
   };
   return (
@@ -59,8 +63,8 @@ const OrderLists = ({navigation, data}) => {
       <FlatList
         data={data}
         renderItem={RenderAllOrdersList}
-        key={({item, index}) => item.orderId + index}
-        ItemSeparatorComponent={() => <View style={{height: 16}} />}
+        key={({ item, index }) => item.orderId + index}
+        ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
         contentContainerStyle={styles.contentContainer}
       />
     </View>
@@ -112,7 +116,7 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.lightGray50,
     borderBottomWidth: 1,
     marginVertical: 17,
-    marginTop:10
+    marginTop: 10
   },
 
   grandTotalCard: {
@@ -120,13 +124,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  grandTotalTxt: {color: COLORS.black, marginLeft: 2},
+  grandTotalTxt: { color: COLORS.black, marginLeft: 2 },
   trackOrderTxt: {
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 11,
-    backgroundColor:'#B7FFD0'
-    
+    backgroundColor: '#B7FFD0'
+
   },
   contentContainer: {
     flexGrow: 1,

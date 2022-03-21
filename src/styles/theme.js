@@ -189,8 +189,8 @@ export const FONTS = {
   },
   inter: {
     fontFamily: 'Inter',
-    fontSize: 14,
-    lineHeight: 19.6,
+    fontSize: 15,
+    lineHeight: 19.6
   },
 };
 

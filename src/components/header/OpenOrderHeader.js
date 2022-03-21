@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import LeftArrow from '../../assets/images/svg/LeftArrow';
 import { NotificationIcon } from '../../assets/images/svg/NotificationIcon';
 import { COLORS, FONTS } from '../../styles/theme';
@@ -7,11 +7,11 @@ import { COLORS, FONTS } from '../../styles/theme';
 const OpenOrderHeader = () => {
   return (
     <View style={styles.container}>
-      <View style={{flexDirection:'row'}}>
-          <LeftArrow color={COLORS.blackSolid}/>
-          <Text style={[ {color: COLORS.blackSolid, marginLeft:24}, FONTS.header4]}>Open Orders</Text>
+      <View style={{ flexDirection: 'row' }}>
+        <LeftArrow color={COLORS.blackSolid} />
+        <Text style={[{ color: COLORS.blackSolid, marginLeft: 24 }, FONTS.header4]}>Open Orders</Text>
       </View>
-      <NotificationIcon/>
+      <NotificationIcon />
     </View>
   );
 };
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 46,
     marginHorizontal: 22,
-    flexDirection:'row',
+    flexDirection: 'row',
     backgroundColor: COLORS.lightGray50
   },
 });
