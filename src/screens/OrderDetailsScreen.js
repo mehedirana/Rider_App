@@ -26,7 +26,6 @@ const OrderDetailsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <HeaderText headerText='Order Details' />
       {modalVisible &&
         <View style={{
           width: '100%',
@@ -36,6 +35,7 @@ const OrderDetailsScreen = () => {
           borderBottomRightRadius: 20,
           zIndex: 10
         }}>
+          <HeaderText headerText='Order Details' />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
               Order # GM2D36-51
@@ -126,12 +126,10 @@ const OrderDetailsScreen = () => {
             bottom: 0,
             left: 0,
             width: '100%',
-            // height: 235,
             backgroundColor: COLORS.whitePure,
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
             paddingHorizontal: 15,
-            // backgroundColor: 'orange'
           }}>
           <TouchableOpacity
             style={{
@@ -152,7 +150,8 @@ const OrderDetailsScreen = () => {
             width: '100%',
             padding: 12,
             flexDirection: 'row',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            backgroundColor: COLORS.lightGray10
           }}>
             <View style={styles.cards}>
               <Text style={[{ color: COLORS.gray }, FONTS.small]}>
@@ -220,7 +219,6 @@ const OrderDetailsScreen = () => {
           <View style={{
             flexDirection: 'row',
             width: '100%',
-            // backgroundColor: 'purple',
             height: 50,
             justifyContent: 'space-evenly',
             marginBottom: 25
@@ -275,6 +273,5 @@ const styles = StyleSheet.create({
   cards: {
     justifyContent: 'center',
     alignItems: 'center',
-    // alignContent: 'center'
   }
 })

@@ -7,9 +7,11 @@ import { COLORS, FONTS } from '../../styles/theme';
 const HeaderText = ({ headerText }) => {
     return (
         <View style={styles.container}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{
+                flexDirection: 'row'
+            }}>
                 <LeftArrow color={COLORS.blackSolid} />
-                <Text style={[{ color: COLORS.blackSolid, marginLeft: 24 }, FONTS.header4]}>{headerText}</Text>
+                <Text style={[{ color: COLORS.blackSolid, marginLeft: 10 }, FONTS.header4]}>{headerText}</Text>
             </View>
             <Text style={[
                 FONTS.inter, { color: COLORS.red }
@@ -22,11 +24,11 @@ export default HeaderText;
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
+        // width: '100%',
         justifyContent: 'space-between',
-        marginTop: 46,
-        paddingHorizontal: 22,
-        paddingVertical: 5,
+        marginTop: 30,
+        // paddingHorizontal: 22,
+        paddingVertical: 10,
         flexDirection: 'row',
         backgroundColor: COLORS.whitePure,
         alignItems: 'center',
