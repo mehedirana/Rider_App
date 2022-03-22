@@ -1,10 +1,19 @@
-import { View, Text, StyleSheet, TouchableOpacity, Linking, Platform } from 'react-native'
-import React, { useState } from 'react'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+  Platform,
+  Animated,
+  LogBox
+} from 'react-native'
+import React, { useState, useRef, useEffect } from 'react'
 import { COLORS, FONTS } from '../styles/theme';
 import HeaderText from '../components/header/HeaderText';
 import MapView from 'react-native-maps';
 import Clock from '../assets/images/svg/Clock';
-import MapLocator from '../assets/images/svg/mapLocator';
+import MapLocator from '../assets/images/svg/MapLocator';
 import Phone from '../assets/Phone';
 import DirectionArrow from '../assets/images/DirectionArrow';
 import HorizontalLine from '../assets/images/svg/HorizontalLine';
@@ -13,6 +22,42 @@ import VerticalLine from '../assets/images/svg/VerticalLine';
 const OrderDetailsScreen = () => {
 
   const [modalVisible, setModalVisible] = useState(true);
+  const fadeAnim = useRef(new Animated.Value(270)).current
+
+  const Animate = () => {
+
+    if (modalVisible) {
+      console.log('==+ if', fadeAnim)
+      Animated.timing(
+        fadeAnim,
+        {
+          toValue: 0,
+          duration: 50,
+        }
+      ).start()
+    } else {
+      console.log('==+ else', fadeAnim)
+      Animated.timing(
+        fadeAnim,
+        {
+          toValue: 270,
+          duration: 1000,
+        }
+      ).start()
+      console.log('==+ out', fadeAnim)
+    }
+  }
+
+  const OnPressMap = () => {
+    console.log('====>', fadeAnim)
+    Animate()
+    setModalVisible(!modalVisible)
+  }
+
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+  })
 
   const dialCall = () => {
     let phoneNumber = ''
@@ -26,234 +71,213 @@ const OrderDetailsScreen = () => {
 
   return (
     <View style={styles.container}>
-      {modalVisible &&
+      <Animated.View style={[styles.topModal]}>
+        <HeaderText headerText='Order Details' />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
+            Order # GM2D36-51
+          </Text>
+          <Text style={[{ color: COLORS.gray }, FONTS.small]}>
+            5 mins ago
+          </Text>
+        </View>
         <View style={{
+          backgroundColor: '#d1ffe180',
           width: '100%',
-          padding: 20,
-          backgroundColor: COLORS.whitePure,
-          borderBottomLeftRadius: 20,
-          borderBottomRightRadius: 20,
-          zIndex: 10
+          height: 32,
+          marginTop: 14,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          borderRadius: 11,
+          paddingHorizontal: 10
         }}>
-          <HeaderText headerText='Order Details' />
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
-              Order # GM2D36-51
-            </Text>
-            <Text style={[{ color: COLORS.gray }, FONTS.small]}>
-              5 mins ago
+          <Clock />
+          <Text style={[{
+            color: COLORS.black10, marginRight: 30
+          }, FONTS.small]}>
+            Estimated Delivery Time:
+          </Text>
+          <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
+            {`Today`}
+          </Text>
+          <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
+            {`|`}
+          </Text>
+          <Text style={[{ color: COLORS.black }, FONTS.bodyBold]}>
+            {`06:30PM`}
+          </Text>
+        </View>
+        <TouchableOpacity
+          onPress={dialCall}
+          style={{
+            width: '100%',
+            height: 100,
+            marginTop: 8,
+            backgroundColor: '#FAFAFA',
+            paddingHorizontal: 9,
+            paddingHorizontal: 8,
+            borderRadius: 6,
+            justifyContent: 'space-evenly'
+          }}>
+          <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
+            Mohammad Saifuddin
+          </Text>
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center'
+          }}>
+            <MapLocator />
+            <Text style={[{ color: COLORS.gray, paddingLeft: 6 }, FONTS.small]}>
+              Harvest Group, DITF Bangladesh 14 Pavilion Golen, Dhaka-1212
             </Text>
           </View>
           <View style={{
-            backgroundColor: '#d1ffe180',
-            width: '100%',
-            height: 32,
-            marginTop: 14,
             flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderRadius: 11,
-            paddingHorizontal: 10
+            alignItems: 'center'
           }}>
-            <Clock />
-            <Text style={[{
-              color: COLORS.black10, marginRight: 30
-            }, FONTS.small]}>
-              Estimated Delivery Time:
-            </Text>
-            <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
-              {`Today`}
-            </Text>
-            <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
-              {`|`}
-            </Text>
-            <Text style={[{ color: COLORS.black }, FONTS.bodyBold]}>
-              {`06:30PM`}
+            <Phone />
+            <Text style={[{ color: COLORS.black50, paddingLeft: 6 }, FONTS.small]}>
+              01756 236 365
             </Text>
           </View>
-          <TouchableOpacity
-            onPress={dialCall}
-            style={{
-              width: '100%',
-              height: 100,
-              marginTop: 8,
-              backgroundColor: '#FAFAFA',
-              paddingHorizontal: 9,
-              paddingHorizontal: 8,
-              borderRadius: 6,
-              justifyContent: 'space-evenly'
-            }}>
-            <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
-              Mohammad Saifuddin
-            </Text>
-            <View style={{
-              flexDirection: 'row',
-              alignItems: 'center'
-            }}>
-              <MapLocator />
-              <Text style={[{ color: COLORS.gray, paddingLeft: 6 }, FONTS.small]}>
-                Harvest Group, DITF Bangladesh 14 Pavilion Golen, Dhaka-1212
-              </Text>
-            </View>
-            <View style={{
-              flexDirection: 'row',
-              alignItems: 'center'
-            }}>
-              <Phone />
-              <Text style={[{ color: COLORS.black50, paddingLeft: 6 }, FONTS.small]}>
-                01756 236 365
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      }
+        </TouchableOpacity>
+      </Animated.View>
 
       <MapView
-        onPress={() => setModalVisible(!modalVisible)}
+        onPress={() => OnPressMap()}
         style={styles.mapStyle}
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitude: 23.7925,
+          longitude: 90.4078,
+          latitudeDelta: 0.006,
+          longitudeDelta: 0.006,
         }}
       />
 
-      {modalVisible &&
-        <View
+      <Animated.View style={[styles.bottomModal]}>
+        <TouchableOpacity
           style={{
-            alignItems: 'center',
-            bottom: 0,
-            left: 0,
             width: '100%',
-            backgroundColor: COLORS.whitePure,
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            paddingHorizontal: 15,
+            height: 45,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <TouchableOpacity
-            style={{
-              width: '100%',
-              height: 45,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text style={
-              [{ color: COLORS.gray, paddingLeft: 6, marginRight: 15 }, FONTS.small]}>
-              full screen map with direction
+          <Text style={
+            [{ color: COLORS.gray, paddingLeft: 6, marginRight: 15 }, FONTS.small]}>
+            full screen map with direction
+          </Text>
+          <DirectionArrow />
+        </TouchableOpacity>
+        <HorizontalLine />
+        <View style={{
+          width: '100%',
+          padding: 12,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          backgroundColor: COLORS.lightGray10
+        }}>
+          <View style={styles.cards}>
+            <Text style={[{ color: COLORS.gray }, FONTS.small]}>
+              Sub-Total
             </Text>
-            <DirectionArrow />
-          </TouchableOpacity>
-          <HorizontalLine />
-          <View style={{
-            width: '100%',
-            padding: 12,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            backgroundColor: COLORS.lightGray10
-          }}>
-            <View style={styles.cards}>
-              <Text style={[{ color: COLORS.gray }, FONTS.small]}>
-                Sub-Total
-              </Text>
-              <Text style={[{ color: COLORS.black }, FONTS.header1
+            <Text style={[{ color: COLORS.black }, FONTS.header1
 
-              ]}>
-                ৳ 630
-              </Text>
-            </View>
-            <VerticalLine />
-            <View style={styles.cards}>
-              <Text style={[{ color: COLORS.gray }, FONTS.small]}>
-                Delivery Charge
-              </Text>
-              <Text style={[{ color: COLORS.black }, FONTS.header1]}>
-                ৳ 30
-              </Text>
-            </View>
-            <VerticalLine />
-            <View style={styles.cards}>
-              <Text style={[{ color: COLORS.gray }, FONTS.small]}>
-                Receivable
-              </Text>
-              <Text style={[{ color: COLORS.primary }, FONTS.header1
-
-              ]}>
-                ৳ 660
-              </Text>
-            </View>
+            ]}>
+              ৳ 630
+            </Text>
           </View>
-          <HorizontalLine />
-          <View style={{
-            flexDirection: 'row',
-            width: '100%',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: 10,
-          }}>
-            <View style={{
-              justifyContent: 'space-between',
-            }}>
-              <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
-                Payment Information
-              </Text>
-              <Text style={[{ color: COLORS.primary, marginRight: 5 }, FONTS.xtraSmall]}>
-                Collect Cash from customer
-              </Text>
-            </View>
-            <View style={{
-              height: 40,
-              width: 130,
-              borderRadius: 9,
-              borderWidth: 2,
-              borderColor: COLORS.lightGray,
-              justifyContent: 'center',
-              alignItems: 'center'
-            }} >
-              <Text style={[{ color: COLORS.black }, FONTS.bodyBold]}>
-                Cash On Delivery
-              </Text>
-            </View>
+          <VerticalLine />
+          <View style={styles.cards}>
+            <Text style={[{ color: COLORS.gray }, FONTS.small]}>
+              Delivery Charge
+            </Text>
+            <Text style={[{ color: COLORS.black }, FONTS.header1]}>
+              ৳ 30
+            </Text>
           </View>
-          <View style={{
-            flexDirection: 'row',
-            width: '100%',
-            height: 50,
-            justifyContent: 'space-evenly',
-            marginBottom: 25
-          }}>
-            <TouchableOpacity style={{
-              height: 58,
-              width: '55%',
-              borderRadius: 9,
-              borderWidth: 2,
-              borderColor: COLORS.lightGray,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#FFF8B9'
-            }} >
-              <Text style={[{ color: '#795700' }, FONTS.buttonLarge]}>
-                Partly Delivered
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{
-              height: 58,
-              width: '35%',
-              borderRadius: 9,
-              borderWidth: 2,
-              borderColor: COLORS.lightGray,
-              justifyContent: 'center',
-              alignItems: 'center'
-            }} >
-              <Text style={[{ color: COLORS.black10 }, FONTS.buttonLarge]}>
-                Delivered
-              </Text>
-            </TouchableOpacity>
+          <VerticalLine />
+          <View style={styles.cards}>
+            <Text style={[{ color: COLORS.gray }, FONTS.small]}>
+              Receivable
+            </Text>
+            <Text style={[{ color: COLORS.primary }, FONTS.header1
 
+            ]}>
+              ৳ 660
+            </Text>
           </View>
         </View>
-      }
+        <HorizontalLine />
+        <View style={{
+          flexDirection: 'row',
+          width: '100%',
+          justifyContent: 'space-between',
+
+          alignItems: 'center',
+          padding: 10,
+        }}>
+          <View style={{
+            justifyContent: 'space-between',
+          }}>
+            <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
+              Payment Information
+            </Text>
+            <Text style={[{ color: COLORS.primary, marginRight: 5 }, FONTS.xtraSmall]}>
+              Collect Cash from customer
+            </Text>
+          </View>
+          <View style={{
+            height: 40,
+            width: 130,
+            borderRadius: 9,
+            borderWidth: 2,
+            borderColor: COLORS.lightGray,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }} >
+            <Text style={[{ color: COLORS.black }, FONTS.bodyBold]}>
+              Cash On Delivery
+            </Text>
+          </View>
+        </View>
+        <View style={{
+          flexDirection: 'row',
+          width: '100%',
+          height: 50,
+          justifyContent: 'space-evenly',
+          marginBottom: 25
+        }}>
+          <TouchableOpacity style={{
+            height: 58,
+            width: '55%',
+            borderRadius: 9,
+            borderWidth: 2,
+            borderColor: COLORS.lightGray,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#FFF8B9'
+          }} >
+            <Text style={[{ color: '#795700' }, FONTS.buttonLarge]}>
+              Partly Delivered
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{
+            height: 58,
+            width: '35%',
+            borderRadius: 9,
+            borderWidth: 2,
+            borderColor: COLORS.lightGray,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }} >
+            <Text style={[{ color: COLORS.black10 }, FONTS.buttonLarge]}>
+              Delivered
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Animated.View>
     </View>
   )
 }
@@ -266,12 +290,30 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.lightGray50,
   },
   mapStyle: {
-    flex: 1,
-    marginTop: -15,
-    marginBottom: -8
+    flex: 1
   },
   cards: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  topModal: {
+    flex: 1,
+    // width: '100%',
+    // height: 290,
+    paddingHorizontal: 20,
+    backgroundColor: COLORS.whitePure,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    // zIndex: 10
+  },
+  bottomModal: {
+    flex: 1,
+    // width: '100%',
+    // height: 275,
+    alignItems: 'center',
+    backgroundColor: COLORS.whitePure,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingHorizontal: 15,
   }
 })
