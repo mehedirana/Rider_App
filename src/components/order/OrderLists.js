@@ -6,12 +6,12 @@ import { COLORS, FONTS } from '../../styles/theme';
 const OrderLists = ({ navigation, data }) => {
 
   const handleAccept = (item) => {
-    console.log('============>', item)
+    // console.log('============>', item)
     navigation.navigate('OrderDetails')
   }
 
   const RenderAllOrdersList = ({ item, index }) => {
-    console.log(item);
+    // console.log(item);
     return (
       <View
         style={styles.card}>

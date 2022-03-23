@@ -4,60 +4,27 @@ import {
   StyleSheet,
   TouchableOpacity,
   Linking,
-  Platform,
-  Animated,
-  LogBox
+  Platform
 } from 'react-native'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { COLORS, FONTS } from '../styles/theme';
 import HeaderText from '../components/header/HeaderText';
-import MapView from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Clock from '../assets/images/svg/Clock';
 import MapLocator from '../assets/images/svg/MapLocator';
 import Phone from '../assets/Phone';
 import DirectionArrow from '../assets/images/DirectionArrow';
 import HorizontalLine from '../assets/images/svg/HorizontalLine';
 import VerticalLine from '../assets/images/svg/VerticalLine';
+import CustomMarkerSVG from '../assets/images/svg/CustomMarkerSVG';
 
-const OrderDetailsScreen = () => {
-
-  const [modalVisible, setModalVisible] = useState(true);
-  const fadeAnim = useRef(new Animated.Value(270)).current
-
-  const Animate = () => {
-
-    if (modalVisible) {
-      console.log('==+ if', fadeAnim)
-      Animated.timing(
-        fadeAnim,
-        {
-          toValue: 0,
-          duration: 50,
-        }
-      ).start()
-    } else {
-      console.log('==+ else', fadeAnim)
-      Animated.timing(
-        fadeAnim,
-        {
-          toValue: 270,
-          duration: 1000,
-        }
-      ).start()
-      console.log('==+ out', fadeAnim)
-    }
-  }
-
-  const OnPressMap = () => {
-    console.log('====>', fadeAnim)
-    Animate()
-    setModalVisible(!modalVisible)
-  }
-
-
-  useEffect(() => {
-    LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
-  })
+const OrderDetailsScreen = ({ navigation }) => {
+  const [latLong, setLatLong] = useState({
+    latitude: 23.781634584964543,
+    longitude: 90.3752835692889,
+    latitudeDelta: 0.006,
+    longitudeDelta: 0.006,
+  });
 
   const dialCall = () => {
     let phoneNumber = ''
@@ -71,7 +38,7 @@ const OrderDetailsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.topModal]}>
+      <View style={[styles.topModal]}>
         <HeaderText headerText='Order Details' />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
@@ -142,21 +109,24 @@ const OrderDetailsScreen = () => {
             </Text>
           </View>
         </TouchableOpacity>
-      </Animated.View>
+      </View>
 
       <MapView
-        onPress={() => OnPressMap()}
         style={styles.mapStyle}
-        initialRegion={{
-          latitude: 23.7925,
-          longitude: 90.4078,
-          latitudeDelta: 0.006,
-          longitudeDelta: 0.006,
-        }}
-      />
+        provider='google'
+        initialRegion={latLong}
+        showsMyLocationButton={true}
+        showsUserLocation={true}
+      >
+        <Marker
+          coordinate={latLong}
+          image={require('../assets/images/LocationMarker.png')}
+        />
+      </MapView>
 
-      <Animated.View style={[styles.bottomModal]}>
+      <View style={[styles.bottomModal]}>
         <TouchableOpacity
+          onPress={() => navigation.navigate('DirectionScreen')}
           style={{
             width: '100%',
             height: 45,
@@ -277,7 +247,7 @@ const OrderDetailsScreen = () => {
             </Text>
           </TouchableOpacity>
         </View>
-      </Animated.View>
+      </View>
     </View>
   )
 }
