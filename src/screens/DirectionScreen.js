@@ -1,97 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ToastAndroid } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import HeaderText from '../components/header/HeaderText';
-import RNLocation from 'react-native-location';
 import MapViewDirections from 'react-native-maps-directions';
-import { COLORS } from '../styles/theme';
 
-const DirectionScreen = () => {
+const DirectionScreen = ({ route }) => {
+    const { latitude, longitude } = route.params
+    const { width, height } = Dimensions.get('window');
+    const ASPECT_RATIO = width / height;
+    const LATITUDE_DELTA = 0.0622;
+    const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+    const mapRef = useRef(null)
 
     const [latLong, setLatLong] = useState({
         latitude: 23.781634584964543,
         longitude: 90.3752835692889,
-        // latitudeDelta: 0.006,
-        // longitudeDelta: 0.006
-        latitudeDelta: 0.0622,
-        longitudeDelta: 0.0121,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
     });
-
-    const [currentLocation, setCurrentLocation] = useState({
-        latitude: 23.783783783783782,
-        longitude: 90.39786368955393
-    })
-
-    const handleCurrentLocation = async () => {
-        location = await RNLocation.getLatestLocation({ timeout: 100 })
-        console.log(location)
-        setCurrentLocation(location)
-    }
-
-    const isPermitted = async () => {
-
-        let permission = await RNLocation.checkPermission({
-            ios: 'whenInUse', // or 'always'
-            android: {
-                detail: 'coarse' // or 'fine'
-            }
-        });
-
-        console.log('Permission ->', permission)
-        return permission
-    }
-
-
-    const handlePermission = () => {
-        RNLocation.configure({
-            distanceFilter: 1, // Meters
-            desiredAccuracy: {
-                ios: 'best',
-                android: 'balancedPowerAccuracy',
-            },
-            // Android only
-            androidProvider: 'auto',
-            interval: 5000, // Milliseconds
-            fastestInterval: 10000, // Milliseconds
-            maxWaitTime: 5000, // Milliseconds
-        });
-
-        RNLocation.requestPermission({
-            ios: 'whenInUse',
-            android: {
-                detail: 'coarse',
-                rationale: {
-                    title: 'We need to access your location',
-                    message: 'We use your location to show where you are on the map',
-                    buttonPositive: 'OK',
-                    buttonNegative: 'Cancel',
-                },
-            },
-        }).then(granted => {
-            if (granted) {
-                handleCurrentLocation();
-            } else {
-                ToastAndroid.showWithGravity(
-                    'Loction permission is not provided!',
-                    ToastAndroid.SHORT,
-                    ToastAndroid.BOTTOM,
-                );
-            }
-        });
-    }
-
-
-    useEffect(() => {
-
-        if (isPermitted()) {
-            handleCurrentLocation()
-        } else {
-            handlePermission()
-        }
-
-    }, []);
-
-
 
     return (
         <View style={styles.container}>
@@ -99,26 +25,39 @@ const DirectionScreen = () => {
             <MapView
                 style={styles.mapStyle}
                 provider='google'
-                region={latLong}
+                initialRegion={latLong}
                 showsUserLocation={true}
                 showsMyLocationButton={true}
                 followsUserLocation={true}
-            // showsTraffic={true}
+                ref={mapRef}
             >
                 <Marker
                     coordinate={latLong}
                     image={require('../assets/images/LocationMarker.png')}
                 />
                 <Marker
-                    coordinate={currentLocation}
-                    image={require('../assets/images/LocationMarker.png')}
+                    coordinate={{ latitude, longitude }}
+                    image={require('../assets/images/GmAvatar.png')}
                 />
                 <MapViewDirections
-                    origin={currentLocation}
+                    origin={{ latitude, longitude }}
                     destination={latLong}
                     apikey='AIzaSyDXfQuQr_ciw0HzKycjJs_cVOVtrVGaIkI'
-                    strokeWidth={5}
+                    strokeWidth={4}
                     strokeColor='red'
+                    onError={(e) => console.warn('Error: ', e)}
+                    onReady={result => {
+                        // console.log('distance: ', result)
+                        mapRef.current.fitToCoordinates(result.coordinates, {
+                            edgePadding: {
+                                right: (width / 20),
+                                bottom: (height / 20),
+                                left: (width / 20),
+                                top: (height / 20),
+                                animated: true
+                            }
+                        })
+                    }}
                 />
             </MapView>
         </View>

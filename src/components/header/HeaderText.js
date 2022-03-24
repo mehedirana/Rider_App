@@ -4,7 +4,7 @@ import LeftArrow from '../../assets/images/svg/LeftArrow';
 import { NotificationIcon } from '../../assets/images/svg/NotificationIcon';
 import { COLORS, FONTS } from '../../styles/theme';
 
-const HeaderText = ({ headerText }) => {
+const HeaderText = ({ headerText, headerRight }) => {
     return (
         <View style={styles.container}>
             <View style={{
@@ -15,7 +15,7 @@ const HeaderText = ({ headerText }) => {
             </View>
             <Text style={[
                 FONTS.inter, { color: COLORS.red }
-            ]}>Rejected</Text>
+            ]}>{headerRight ? headerRight : ''}</Text>
         </View>
     );
 };
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginTop: 30,
         // paddingHorizontal: 22,
-        paddingVertical: 10,
+        padding: 10,
         flexDirection: 'row',
         backgroundColor: COLORS.whitePure,
         alignItems: 'center',

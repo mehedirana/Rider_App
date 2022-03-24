@@ -4,7 +4,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Linking,
-  Platform
+  Platform,
+  ActivityIndicator
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLORS, FONTS } from '../styles/theme';
@@ -16,7 +17,7 @@ import Phone from '../assets/Phone';
 import DirectionArrow from '../assets/images/DirectionArrow';
 import HorizontalLine from '../assets/images/svg/HorizontalLine';
 import VerticalLine from '../assets/images/svg/VerticalLine';
-import CustomMarkerSVG from '../assets/images/svg/CustomMarkerSVG';
+import RNLocation from 'react-native-location';
 
 const OrderDetailsScreen = ({ navigation }) => {
   const [latLong, setLatLong] = useState({
@@ -25,6 +26,24 @@ const OrderDetailsScreen = ({ navigation }) => {
     latitudeDelta: 0.006,
     longitudeDelta: 0.006,
   });
+
+
+  const [crntlatLong, setCrntlatLong] = useState(null);
+
+
+  useEffect(() => {
+
+    handlePermission()
+    // handleCurrentLocation()
+  }, [crntlatLong]);
+
+  const handleDirection = () => {
+    // handleCurrentLocation()
+    navigation.navigate('DirectionScreen', {
+      latitude: crntlatLong[0].latitude,
+      longitude: crntlatLong[0].longitude
+    })
+  }
 
   const dialCall = () => {
     let phoneNumber = ''
@@ -36,10 +55,58 @@ const OrderDetailsScreen = ({ navigation }) => {
     Linking.openURL(phoneNumber)
   }
 
+
+  const handleCurrentLocation = () => {
+    location = RNLocation.subscribeToLocationUpdates(location => {
+      // console.log('handleCurrentLocation ==>', location)
+      setCrntlatLong(location)
+    })
+    // setCurrentLocation(location)
+    // return location
+  }
+
+  const handlePermission = () => {
+    RNLocation.configure({
+      distanceFilter: 1, // Meters
+      desiredAccuracy: {
+        ios: 'best',
+        android: 'balancedPowerAccuracy',
+      },
+      // Android only
+      androidProvider: 'auto',
+      interval: 5000, // Milliseconds
+      fastestInterval: 10000, // Milliseconds
+      maxWaitTime: 5000, // Milliseconds
+    });
+
+    RNLocation.requestPermission({
+      ios: 'whenInUse',
+      android: {
+        detail: 'coarse',
+        rationale: {
+          title: 'We need to access your location',
+          message: 'We use your location to show where you are on the map',
+          buttonPositive: 'OK',
+          buttonNegative: 'Cancel',
+        },
+      },
+    }).then(granted => {
+      if (granted) {
+        handleCurrentLocation()
+      } else {
+        ToastAndroid.showWithGravity(
+          'Loction permission is not provided!',
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
+      }
+    });
+  }
+
   return (
     <View style={styles.container}>
       <View style={[styles.topModal]}>
-        <HeaderText headerText='Order Details' />
+        <HeaderText headerText='Order Details' headerRight='Rejected' />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
             Order # GM2D36-51
@@ -126,7 +193,7 @@ const OrderDetailsScreen = ({ navigation }) => {
 
       <View style={[styles.bottomModal]}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('DirectionScreen')}
+          onPress={() => handleDirection()}
           style={{
             width: '100%',
             height: 45,
@@ -134,11 +201,16 @@ const OrderDetailsScreen = ({ navigation }) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={
-            [{ color: COLORS.gray, paddingLeft: 6, marginRight: 15 }, FONTS.small]}>
-            full screen map with direction
-          </Text>
-          <DirectionArrow />
+          {crntlatLong ?
+            <>
+              <Text style={
+                [{ color: COLORS.gray, paddingLeft: 6, marginRight: 15 }, FONTS.small]}>
+                full screen map with direction
+              </Text>
+              <DirectionArrow />
+            </>
+            : <ActivityIndicator size="small" color="#00ff00" />
+          }
         </TouchableOpacity>
         <HorizontalLine />
         <View style={{
