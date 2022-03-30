@@ -12,9 +12,9 @@ const StackNavigation = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Tab' component={TabNavigation}/>
-        {/* <Stack.Screen name='OpenOrders' component={OpenOrderScreen} />
+        {/* <Stack.Screen name='OpenOrders' component={OpenOrderScreen} />*/}
         <Stack.Screen name='OrderDetails' component={OrderDetailsScreen} />
-        <Stack.Screen name='DirectionScreen' component={DirectionScreen} /> */}
+        <Stack.Screen name='DirectionScreen' component={DirectionScreen} /> 
       </Stack.Navigator> 
     </NavigationContainer>
   );
