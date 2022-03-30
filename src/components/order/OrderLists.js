@@ -5,9 +5,13 @@ import { COLORS, FONTS } from '../../styles/theme';
 
 const OrderLists = ({ navigation, data }) => {
 
-  const handleAccept = (item) => {
+  const handleAcceptOrder = (item) => {
     // console.log('============>', item)
     navigation.navigate('OrderDetails')
+  }
+
+  const handleCancelOrder =(item)=>{
+
   }
 
   const RenderAllOrdersList = ({ item, index }) => {
@@ -41,7 +45,7 @@ const OrderLists = ({ navigation, data }) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => handleAccept(item)}
+            onPress={() => handleAcceptOrder(item)}
             disabled={item.status === 'Cancelled' ? true : false}>
             <Text
               style={[

@@ -5,12 +5,12 @@ import {
   TouchableOpacity,
   Linking,
   Platform,
-  ActivityIndicator
-} from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { COLORS, FONTS } from '../styles/theme';
+  ActivityIndicator,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {COLORS, FONTS} from '../styles/theme';
 import HeaderText from '../components/header/HeaderText';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Clock from '../assets/images/svg/Clock';
 import MapLocator from '../assets/images/svg/MapLocator';
 import Phone from '../assets/Phone';
@@ -19,7 +19,7 @@ import HorizontalLine from '../assets/images/svg/HorizontalLine';
 import VerticalLine from '../assets/images/svg/VerticalLine';
 import RNLocation from 'react-native-location';
 
-const OrderDetailsScreen = ({ navigation }) => {
+const OrderDetailsScreen = ({navigation}) => {
   const [latLong, setLatLong] = useState({
     latitude: 23.781634584964543,
     longitude: 90.3752835692889,
@@ -27,43 +27,41 @@ const OrderDetailsScreen = ({ navigation }) => {
     longitudeDelta: 0.006,
   });
 
-
   const [crntlatLong, setCrntlatLong] = useState(null);
 
-
   useEffect(() => {
-
-    handlePermission()
+    let test = false;
+    handlePermission();
     // handleCurrentLocation()
+
+    return () => (test = true);
   }, [crntlatLong]);
 
   const handleDirection = () => {
     // handleCurrentLocation()
     navigation.navigate('DirectionScreen', {
       latitude: crntlatLong[0].latitude,
-      longitude: crntlatLong[0].longitude
-    })
-  }
+      longitude: crntlatLong[0].longitude,
+    });
+  };
 
   const dialCall = () => {
-    let phoneNumber = ''
-    if (Platform.OS === 'android')
-      phoneNumber = `tel:${'01677577123'}`
+    let phoneNumber = '';
+    if (Platform.OS === 'android') phoneNumber = `tel:${'01677577123'}`;
     else {
-      phoneNumber = `telprompt:${'01677577123'}`
+      phoneNumber = `telprompt:${'01677577123'}`;
     }
-    Linking.openURL(phoneNumber)
-  }
-
+    Linking.openURL(phoneNumber);
+  };
 
   const handleCurrentLocation = () => {
     location = RNLocation.subscribeToLocationUpdates(location => {
       // console.log('handleCurrentLocation ==>', location)
-      setCrntlatLong(location)
-    })
+      setCrntlatLong(location);
+    });
     // setCurrentLocation(location)
     // return location
-  }
+  };
 
   const handlePermission = () => {
     RNLocation.configure({
@@ -92,7 +90,7 @@ const OrderDetailsScreen = ({ navigation }) => {
       },
     }).then(granted => {
       if (granted) {
-        handleCurrentLocation()
+        handleCurrentLocation();
       } else {
         ToastAndroid.showWithGravity(
           'Loction permission is not provided!',
@@ -101,44 +99,46 @@ const OrderDetailsScreen = ({ navigation }) => {
         );
       }
     });
-  }
+  };
 
   return (
     <View style={styles.container}>
       <View style={[styles.topModal]}>
-        <HeaderText headerText='Order Details' headerRight='Rejected' />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
+        <HeaderText headerText="Order Details" headerRight="Rejected" navigation={navigation} />
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>
             Order # GM2D36-51
           </Text>
-          <Text style={[{ color: COLORS.gray }, FONTS.small]}>
-            5 mins ago
-          </Text>
+          <Text style={[{color: COLORS.gray}, FONTS.small]}>5 mins ago</Text>
         </View>
-        <View style={{
-          backgroundColor: '#d1ffe180',
-          width: '100%',
-          height: 32,
-          marginTop: 14,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderRadius: 11,
-          paddingHorizontal: 10
-        }}>
+        <View
+          style={{
+            backgroundColor: '#d1ffe180',
+            width: '100%',
+            height: 32,
+            marginTop: 14,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderRadius: 11,
+            paddingHorizontal: 10,
+          }}>
           <Clock />
-          <Text style={[{
-            color: COLORS.black10, marginRight: 30
-          }, FONTS.small]}>
+          <Text
+            style={[
+              {
+                color: COLORS.black10,
+                marginRight: 30,
+              },
+              FONTS.small,
+            ]}>
             Estimated Delivery Time:
           </Text>
-          <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
+          <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>
             {`Today`}
           </Text>
-          <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
-            {`|`}
-          </Text>
-          <Text style={[{ color: COLORS.black }, FONTS.bodyBold]}>
+          <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>{`|`}</Text>
+          <Text style={[{color: COLORS.black}, FONTS.bodyBold]}>
             {`06:30PM`}
           </Text>
         </View>
@@ -152,26 +152,29 @@ const OrderDetailsScreen = ({ navigation }) => {
             paddingHorizontal: 9,
             paddingHorizontal: 8,
             borderRadius: 6,
-            justifyContent: 'space-evenly'
+            justifyContent: 'space-evenly',
           }}>
-          <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
+          <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>
             Mohammad Saifuddin
           </Text>
-          <View style={{
-            flexDirection: 'row',
-            alignItems: 'center'
-          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
             <MapLocator />
-            <Text style={[{ color: COLORS.gray, paddingLeft: 6 }, FONTS.small]}>
+            <Text style={[{color: COLORS.gray, paddingLeft: 6}, FONTS.small]}>
               Harvest Group, DITF Bangladesh 14 Pavilion Golen, Dhaka-1212
             </Text>
           </View>
-          <View style={{
-            flexDirection: 'row',
-            alignItems: 'center'
-          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
             <Phone />
-            <Text style={[{ color: COLORS.black50, paddingLeft: 6 }, FONTS.small]}>
+            <Text
+              style={[{color: COLORS.black50, paddingLeft: 6}, FONTS.small]}>
               01756 236 365
             </Text>
           </View>
@@ -180,11 +183,10 @@ const OrderDetailsScreen = ({ navigation }) => {
 
       <MapView
         style={styles.mapStyle}
-        provider='google'
+        provider="google"
         initialRegion={latLong}
         showsMyLocationButton={true}
-        showsUserLocation={true}
-      >
+        showsUserLocation={true}>
         <Marker
           coordinate={latLong}
           image={require('../assets/images/LocationMarker.png')}
@@ -201,128 +203,129 @@ const OrderDetailsScreen = ({ navigation }) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          {crntlatLong ?
+          {crntlatLong ? (
             <>
-              <Text style={
-                [{ color: COLORS.gray, paddingLeft: 6, marginRight: 15 }, FONTS.small]}>
+              <Text
+                style={[
+                  {color: COLORS.gray, paddingLeft: 6, marginRight: 15},
+                  FONTS.small,
+                ]}>
                 full screen map with direction
               </Text>
               <DirectionArrow />
             </>
-            : <ActivityIndicator size="small" color="#00ff00" />
-          }
+          ) : (
+            <ActivityIndicator size="small" color="#00ff00" />
+          )}
         </TouchableOpacity>
         <HorizontalLine />
-        <View style={{
-          width: '100%',
-          padding: 12,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          backgroundColor: COLORS.lightGray10
-        }}>
+        <View
+          style={{
+            width: '100%',
+            padding: 12,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            backgroundColor: COLORS.lightGray10,
+          }}>
           <View style={styles.cards}>
-            <Text style={[{ color: COLORS.gray }, FONTS.small]}>
-              Sub-Total
-            </Text>
-            <Text style={[{ color: COLORS.black }, FONTS.header1
-
-            ]}>
-              ৳ 630
-            </Text>
+            <Text style={[{color: COLORS.gray}, FONTS.small]}>Sub-Total</Text>
+            <Text style={[{color: COLORS.black}, FONTS.header1]}>৳ 630</Text>
           </View>
           <VerticalLine />
           <View style={styles.cards}>
-            <Text style={[{ color: COLORS.gray }, FONTS.small]}>
+            <Text style={[{color: COLORS.gray}, FONTS.small]}>
               Delivery Charge
             </Text>
-            <Text style={[{ color: COLORS.black }, FONTS.header1]}>
-              ৳ 30
-            </Text>
+            <Text style={[{color: COLORS.black}, FONTS.header1]}>৳ 30</Text>
           </View>
           <VerticalLine />
           <View style={styles.cards}>
-            <Text style={[{ color: COLORS.gray }, FONTS.small]}>
-              Receivable
-            </Text>
-            <Text style={[{ color: COLORS.primary }, FONTS.header1
-
-            ]}>
-              ৳ 660
-            </Text>
+            <Text style={[{color: COLORS.gray}, FONTS.small]}>Receivable</Text>
+            <Text style={[{color: COLORS.primary}, FONTS.header1]}>৳ 660</Text>
           </View>
         </View>
         <HorizontalLine />
-        <View style={{
-          flexDirection: 'row',
-          width: '100%',
-          justifyContent: 'space-between',
-
-          alignItems: 'center',
-          padding: 10,
-        }}>
-          <View style={{
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
             justifyContent: 'space-between',
+
+            alignItems: 'center',
+            padding: 10,
           }}>
-            <Text style={[{ color: COLORS.black }, FONTS.bodyMedium]}>
+          <View
+            style={{
+              justifyContent: 'space-between',
+            }}>
+            <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>
               Payment Information
             </Text>
-            <Text style={[{ color: COLORS.primary, marginRight: 5 }, FONTS.xtraSmall]}>
+            <Text
+              style={[
+                {color: COLORS.primary, marginRight: 5},
+                FONTS.xtraSmall,
+              ]}>
               Collect Cash from customer
             </Text>
           </View>
-          <View style={{
-            height: 40,
-            width: 130,
-            borderRadius: 9,
-            borderWidth: 2,
-            borderColor: COLORS.lightGray,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }} >
-            <Text style={[{ color: COLORS.black }, FONTS.bodyBold]}>
+          <View
+            style={{
+              height: 40,
+              width: 130,
+              borderRadius: 9,
+              borderWidth: 2,
+              borderColor: COLORS.lightGray,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={[{color: COLORS.black}, FONTS.bodyBold]}>
               Cash On Delivery
             </Text>
           </View>
         </View>
-        <View style={{
-          flexDirection: 'row',
-          width: '100%',
-          height: 50,
-          justifyContent: 'space-evenly',
-          marginBottom: 25
-        }}>
-          <TouchableOpacity style={{
-            height: 58,
-            width: '55%',
-            borderRadius: 9,
-            borderWidth: 2,
-            borderColor: COLORS.lightGray,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#FFF8B9'
-          }} >
-            <Text style={[{ color: '#795700' }, FONTS.buttonLarge]}>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            height: 50,
+            justifyContent: 'space-evenly',
+            marginBottom: 25,
+          }}>
+          <TouchableOpacity
+            style={{
+              height: 58,
+              width: '55%',
+              borderRadius: 9,
+              borderWidth: 2,
+              borderColor: COLORS.lightGray,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#FFF8B9',
+            }}>
+            <Text style={[{color: '#795700'}, FONTS.buttonLarge]}>
               Partly Delivered
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{
-            height: 58,
-            width: '35%',
-            borderRadius: 9,
-            borderWidth: 2,
-            borderColor: COLORS.lightGray,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }} >
-            <Text style={[{ color: COLORS.black10 }, FONTS.buttonLarge]}>
+          <TouchableOpacity
+            style={{
+              height: 58,
+              width: '35%',
+              borderRadius: 9,
+              borderWidth: 2,
+              borderColor: COLORS.lightGray,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={[{color: COLORS.black10}, FONTS.buttonLarge]}>
               Delivered
             </Text>
           </TouchableOpacity>
         </View>
       </View>
     </View>
-  )
-}
+  );
+};
 
 export default OrderDetailsScreen;
 
@@ -332,7 +335,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.lightGray50,
   },
   mapStyle: {
-    flex: 1
+    flex: 1,
   },
   cards: {
     justifyContent: 'center',
@@ -357,5 +360,5 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingHorizontal: 15,
-  }
-})
+  },
+});

@@ -4,7 +4,7 @@ import MapView, { Marker } from 'react-native-maps';
 import HeaderText from '../components/header/HeaderText';
 import MapViewDirections from 'react-native-maps-directions';
 
-const DirectionScreen = ({ route }) => {
+const DirectionScreen = ({ route, navigation }) => {
     const { latitude, longitude } = route.params
     const { width, height } = Dimensions.get('window');
     const ASPECT_RATIO = width / height;
@@ -21,7 +21,7 @@ const DirectionScreen = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <HeaderText headerText='Order Details' />
+            <HeaderText headerText='Order Details' navigation={navigation} />
             <MapView
                 style={styles.mapStyle}
                 provider='google'
@@ -67,14 +67,10 @@ const DirectionScreen = ({ route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // paddingTop: 50
-        // backgroundColor: 'red'
     },
     mapStyle: {
         flex: 1,
 
-        // height: 600,
-        // marginTop: 10
     },
 })
 
