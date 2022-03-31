@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
         // paddingHorizontal: 22,
         padding: 10,
+        paddingLeft:0,
         flexDirection: 'row',
         backgroundColor: COLORS.whitePure,
         alignItems: 'center',

@@ -263,7 +263,7 @@ const OrderDetailsScreen = ({navigation}) => {
             </Text>
             <Text
               style={[
-                {color: COLORS.primary, marginRight: 5},
+                {color: COLORS.primary, marginRight: 5, marginTop:2},
                 FONTS.xtraSmall,
               ]}>
               Collect Cash from customer
@@ -288,13 +288,14 @@ const OrderDetailsScreen = ({navigation}) => {
           style={{
             flexDirection: 'row',
             width: '100%',
-            height: 50,
+            // height: 50,
             justifyContent: 'space-evenly',
-            marginBottom: 25,
+     
           }}>
           <TouchableOpacity
+          onPress={()=> navigation.navigate('PartyOrderScreen')}
             style={{
-              height: 58,
+              // height: 58,
               width: '55%',
               borderRadius: 9,
               borderWidth: 2,
@@ -342,23 +343,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   topModal: {
-    flex: 1,
-    // width: '100%',
-    // height: 290,
+    // flex: 1,
     paddingHorizontal: 20,
     backgroundColor: COLORS.whitePure,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    // zIndex: 10
+    paddingBottom:20
   },
   bottomModal: {
-    flex: 1,
-    // width: '100%',
-    // height: 275,
+    // flex: 1,
     alignItems: 'center',
     backgroundColor: COLORS.whitePure,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingHorizontal: 15,
+    paddingBottom:20
   },
 });
