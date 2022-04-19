@@ -61,7 +61,7 @@ const LoginScreen = () => {
         <Text
           style={[
             {
-              color: '#696969',
+              color: COLORS.black10,
               marginTop: 32,
             },
             FONTS.smallTitle,
