@@ -6,6 +6,7 @@ import {
   Linking,
   Platform,
   ActivityIndicator,
+  Dimensions
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLORS, FONTS} from '../styles/theme';
@@ -18,6 +19,9 @@ import DirectionArrow from '../assets/images/DirectionArrow';
 import HorizontalLine from '../assets/images/svg/HorizontalLine';
 import VerticalLine from '../assets/images/svg/VerticalLine';
 import RNLocation from 'react-native-location';
+// import CircularProgress from 'react-native-circular-progress-indicator';
+
+const {height, width} = Dimensions.get('window');
 
 const OrderDetailsScreen = ({navigation}) => {
   const [latLong, setLatLong] = useState({
@@ -104,7 +108,7 @@ const OrderDetailsScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={[styles.topModal]}>
-        <HeaderText headerText="Order Details" headerRight="Rejected" navigation={navigation} />
+        <HeaderText headerText="Order Details" headerRight="Cancel Delivery" navigation={navigation} />
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>
             Order # GM2D36-51
@@ -142,8 +146,11 @@ const OrderDetailsScreen = ({navigation}) => {
             {`06:30PM`}
           </Text>
         </View>
+        <View style={{flexDirection:'row'}}>
+
+     
         <TouchableOpacity
-          onPress={dialCall}
+          // onPress={dialCall}
           style={{
             width: '100%',
             height: 100,
@@ -171,14 +178,29 @@ const OrderDetailsScreen = ({navigation}) => {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
+              borderWidth:1
             }}>
-            <Phone />
+            <Phone color={COLORS.whitePure} />
             <Text
-              style={[{color: COLORS.black50, paddingLeft: 6}, FONTS.small]}>
+              style={[{color: COLORS.whitePure, paddingLeft: 6}, FONTS.small]}>
               01756 236 365
             </Text>
           </View>
         </TouchableOpacity>
+
+        {/* <CircularProgress
+            value={60}
+            radius={width * 0.18}
+            progressValueColor={'#ecf0f1'}
+            activeStrokeColor={'#00EE4A'}
+            inActiveStrokeColor={'#7AFBA8'}
+            inActiveStrokeOpacity={0.1}
+            inActiveStrokeWidth={30}
+            activeStrokeWidth={10}
+            titleStyle={{fontSize: 10, top: Platform.OS == 'ios' ? -5 : -20}}
+            title={'ARRIVING IN'}
+          /> */}
+        </View>
       </View>
 
       <MapView

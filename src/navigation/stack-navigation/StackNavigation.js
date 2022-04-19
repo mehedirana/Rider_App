@@ -10,7 +10,8 @@ import FinishScreen from '../../screens/FinishScreen';
 import LoginScreen from '../../screens/LoginScreen';
 const Stack = createNativeStackNavigator();
 
-const user = {name:'mehedi'};
+// const user = {name:'mehedi'};
+const user = null;
 
 const StackNavigation = () => {
   return (

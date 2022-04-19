@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput} from 'react-native';
 import CommonBtn from '../common/CommonBtn';
+import { driverLogin } from '../services/admin';
 import {COLORS, FONTS} from '../styles/theme';
 
 const LoginScreen = () => {
@@ -10,6 +11,22 @@ const LoginScreen = () => {
   const [messages, setMessages] = useState('');
   const [isPhoneUnfocus, setIsPhoneUnfocus] = useState(true);
   const [isAvailable, setIsAvailable] = useState(false);
+
+  const handleUserLogin = ()=>{
+    const data ={
+       username:phone,
+       password: password
+    }
+    driverLogin(data)
+    .then(res => {
+      console.log('------>', res);
+
+    })
+    .catch(e => {
+      console.log(e);
+    });
+   
+  }
 
   return (
     <View style={styles.container}>
@@ -51,9 +68,10 @@ const LoginScreen = () => {
           // ref={phoneRef}
           value={phone}
           maxLength={11}
-          placeholder="01XXXXXXXXX"
+          // placeholder="01XXXXXXXXX"
+          placeholder="Ex. kashem"
           placeholderTextColor={COLORS.gray}
-          keyboardType="numeric"
+          // keyboardType="numeric"
         />
       </View>
 
@@ -86,13 +104,14 @@ const LoginScreen = () => {
             value={password}
             secureTextEntry={true}
             placeholder="*********"
-            maxLength={5}
+            maxLength={6}
             placeholderTextColor={COLORS.gray}
           />
         </View>
 
         <View style={{marginTop:22}}>
           <CommonBtn
+          onPress={handleUserLogin}
             title={'Log in'}
             backgroundColor={COLORS.primary}
             color={COLORS.whitePure}

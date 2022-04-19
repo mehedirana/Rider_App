@@ -6,7 +6,9 @@ const envVariables = {
     INVENTORY_URL: 'http://54.169.254.157:2001/api/v1/inventory',
     SALES_URL: 'http://13.212.68.212:4008/api/v1/sales',
     ACCOUNT_URL: 'http://54.169.254.157:2000/api/v1/core/account',
-    SALES_ORDER_URL: 'http://54.169.254.157:2002/api/v1/sales'
+    ADMIN_URL: 'http://54.169.254.157:2000/api/v1/core/admin',
+    SALES_ORDER_URL: 'http://54.169.254.157:2002/api/v1/sales',
+    
 }
 
 export default envVariables;
