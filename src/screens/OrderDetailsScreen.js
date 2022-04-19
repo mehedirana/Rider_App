@@ -20,6 +20,7 @@ import HorizontalLine from '../assets/images/svg/HorizontalLine';
 import VerticalLine from '../assets/images/svg/VerticalLine';
 import RNLocation from 'react-native-location';
 // import CircularProgress from 'react-native-circular-progress-indicator';
+// import CircularProgress from 'react-native-circular-progress-indicator';
 
 const {height, width} = Dimensions.get('window');
 
@@ -118,14 +119,15 @@ const OrderDetailsScreen = ({navigation}) => {
         <View
           style={{
             backgroundColor: '#d1ffe180',
-            width: '100%',
-            height: 32,
+            width:'100%',
+            // height: 32,
             marginTop: 14,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
             borderRadius: 11,
             paddingHorizontal: 10,
+            paddingVertical:8
           }}>
           <Clock />
           <Text
@@ -149,19 +151,19 @@ const OrderDetailsScreen = ({navigation}) => {
         <View style={{flexDirection:'row'}}>
 
      
-        <TouchableOpacity
+        <View
           // onPress={dialCall}
           style={{
             width: '100%',
             height: 100,
             marginTop: 8,
-            backgroundColor: '#FAFAFA',
+            // backgroundColor: '#FAFAFA',
             paddingHorizontal: 9,
             paddingHorizontal: 8,
             borderRadius: 6,
             justifyContent: 'space-evenly',
           }}>
-          <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>
+          <Text style={[{color: COLORS.black, marginTop:10}, FONTS.bodyMedium,]}>
             Mohammad Saifuddin
           </Text>
           <View
@@ -169,24 +171,29 @@ const OrderDetailsScreen = ({navigation}) => {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <MapLocator />
-            <Text style={[{color: COLORS.gray, paddingLeft: 6}, FONTS.small]}>
+            {/* <MapLocator /> */}
+            <Text style={[{color: COLORS.gray, marginTop:10}, FONTS.small]}>
               Harvest Group, DITF Bangladesh 14 Pavilion Golen, Dhaka-1212
             </Text>
           </View>
-          <View
+          <TouchableOpacity
+          onPress={dialCall}
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              borderWidth:1
+              backgroundColor:COLORS.primary,
+              marginTop:12,
+              borderRadius:9,
+              paddingHorizontal:10,
+              width:width * .35
             }}>
             <Phone color={COLORS.whitePure} />
             <Text
-              style={[{color: COLORS.whitePure, paddingLeft: 6}, FONTS.small]}>
+              style={[{color: COLORS.whitePure, paddingLeft: 6, paddingVertical:10}, FONTS.smallBold]}>
               01756 236 365
             </Text>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
 
         {/* <CircularProgress
             value={60}
@@ -201,6 +208,9 @@ const OrderDetailsScreen = ({navigation}) => {
             title={'ARRIVING IN'}
           /> */}
         </View>
+        <View style={{borderBottomWidth:1, borderColor:COLORS.gray, marginTop:17}}/>
+        <Text style={{marginTop:10, ...FONTS.small,color:COLORS.gray}}>Special Instruction</Text>
+        <Text style={{marginTop:3, ...FONTS.body,color:COLORS.black50}}>Ask the security guard for Mr. Naim</Text>
       </View>
 
       <MapView
@@ -327,7 +337,7 @@ const OrderDetailsScreen = ({navigation}) => {
               backgroundColor: '#FFF8B9',
             }}>
             <Text style={[{color: '#795700'}, FONTS.buttonLarge]}>
-              Partly Delivered
+              Partly Return
             </Text>
           </TouchableOpacity>
           <TouchableOpacity

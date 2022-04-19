@@ -9,12 +9,15 @@ import {
 import {NotificationIcon} from '../assets/images/svg/NotificationIcon';
 import HomeCard from '../components/home/HomeCard';
 import {COLORS, FONTS} from '../styles/theme';
+import { useSelector } from 'react-redux';
 
 const backgroundImg = require('../assets/images/cityBackground.png');
 
 const {height, width} = Dimensions.get('window');
 const HomeScreen = () => {
-  
+  const { user } = useSelector(e => e.userState);
+
+  console.log(user);
   return (
     <View style={styles.container}>
       <View
@@ -36,7 +39,7 @@ const HomeScreen = () => {
       </View>
 
       <Text style={{marginTop: 14, ...FONTS.header1, color: COLORS.blackSolid}}>
-        Hi, Marzuk Russel
+        Hi, {user?.user_data?.fullname}
       </Text>
       <Text style={{marginTop: 4, color: COLORS.black, ...FONTS.bodyMedium}}>
         Let’s deliver the best today!
