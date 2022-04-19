@@ -14,6 +14,7 @@ const backgroundImg = require('../assets/images/cityBackground.png');
 
 const {height, width} = Dimensions.get('window');
 const HomeScreen = () => {
+  
   return (
     <View style={styles.container}>
       <View

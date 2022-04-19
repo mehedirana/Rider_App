@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TextInput} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Alert} from 'react-native';
 import CommonBtn from '../common/CommonBtn';
-import { driverLogin } from '../services/admin';
+import {driverLogin} from '../services/admin';
+import {userLogIn} from '../store/auth/userAction';
 import {COLORS, FONTS} from '../styles/theme';
+import {useDispatch} from 'react-redux';
 
 const LoginScreen = () => {
   const [value, setValue] = useState(null);
@@ -12,21 +14,50 @@ const LoginScreen = () => {
   const [isPhoneUnfocus, setIsPhoneUnfocus] = useState(true);
   const [isAvailable, setIsAvailable] = useState(false);
 
-  const handleUserLogin = ()=>{
-    const data ={
-       username:phone,
-       password: password
-    }
-    driverLogin(data)
-    .then(res => {
-      console.log('------>', res);
+  const dispatch = useDispatch();
 
-    })
-    .catch(e => {
-      console.log(e);
-    });
-   
-  }
+  const handleUserLogin = () => {
+    const data = {
+      username: phone,
+      password: password,
+    };
+    driverLogin(data)
+      .then(res => {
+        if (res.success) {
+          if (res?.data?.user_data?.account_category_id === 3) {
+            dispatch(userLogIn(res?.data));
+          } else {
+            Alert.alert('Warning', 'This app is only for riders', [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ]);
+          }
+        } else {
+          Alert.alert(res?.error_code, res?.error_message, [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+      })
+      .catch(e => {
+        Alert.alert(e, 'Error Msg', [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ]);
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -109,9 +140,9 @@ const LoginScreen = () => {
           />
         </View>
 
-        <View style={{marginTop:22}}>
+        <View style={{marginTop: 22}}>
           <CommonBtn
-          onPress={handleUserLogin}
+            onPress={handleUserLogin}
             title={'Log in'}
             backgroundColor={COLORS.primary}
             color={COLORS.whitePure}

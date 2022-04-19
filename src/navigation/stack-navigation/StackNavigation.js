@@ -8,12 +8,14 @@ import TabNavigation from '../tab-navigation/TabNavigation';
 import PartlyOrderDetailsScreen from '../../screens/PartlyOrderDetailsScreen';
 import FinishScreen from '../../screens/FinishScreen';
 import LoginScreen from '../../screens/LoginScreen';
+import { useSelector } from 'react-redux';
+
 const Stack = createNativeStackNavigator();
 
-// const user = {name:'mehedi'};
-const user = null;
+
 
 const StackNavigation = () => {
+  const { user } = useSelector(e => e.userState);
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
