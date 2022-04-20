@@ -375,7 +375,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   topModal: {
-    // flex: 1,
     paddingHorizontal: 20,
     backgroundColor: COLORS.whitePure,
     borderBottomLeftRadius: 20,
@@ -383,7 +382,6 @@ const styles = StyleSheet.create({
     paddingBottom:20
   },
   bottomModal: {
-    // flex: 1,
     alignItems: 'center',
     backgroundColor: COLORS.whitePure,
     borderTopLeftRadius: 20,

@@ -1,9 +1,27 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import HeaderText from '../components/header/HeaderText';
+import PartReturnList from '../components/order/PartReturnList';
 import {COLORS, FONTS} from '../styles/theme';
 
+
+const data = [
+  {
+    id:1, 
+    name: 'Maggi Fried Rice Seasoning 6 gm',
+    qty:3,
+    umo:'pcs'
+  },
+  {
+    id:2, 
+    name: 'Romania Coconut Milk Biscuit 60 gm',
+    qty:2,
+    umo:'pcs'
+  },
+]
+
 const PartlyOrderDetailsScreen = ({navigation}) => {
+  let temp = data.map((e)=>({...e, preQty : e.qty}))
   return (
     <View style={styles.container}>
       <View style={{marginHorizontal: 10}}>
@@ -19,6 +37,7 @@ const PartlyOrderDetailsScreen = ({navigation}) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           marginHorizontal: 22,
+          marginTop:15
         }}>
         <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>
           Order # GM2D36-51
@@ -43,14 +62,15 @@ const PartlyOrderDetailsScreen = ({navigation}) => {
         }}>
         Items ordered
       </Text>
-      <View>
+      <PartReturnList data={temp}/>
+      {/* <View>
         <View style={{flexDirection: 'row'}}>
           <Text>Maggi Fried Rice Seasoning 6 gm</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
           <Text>Maggi Fried Rice Seasoning 6 gm</Text>
         </View>
-      </View>
+      </View> */}
       <View
         style={{
           borderBottomWidth: 1,

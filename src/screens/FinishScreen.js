@@ -1,47 +1,53 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {COLORS, FONTS} from '../styles/theme';
 
 const FinishScreen = () => {
   return (
-    <View>
+    <View style={styles.container}>
       <Text
         style={{
           color: COLORS.blackSolid,
           marginTop: 129,
           textAlign: 'center',
-          ...FONTS.header2,
+          ...FONTS.header5,
         }}>
         Thank You for{'\n'}your successfull{'\n'}delivery
       </Text>
       <Text
-        style={{color: COLORS.blackSolid, marginTop: 56, textAlign: 'center'}}>
+        style={{color: COLORS.blackSolid, marginTop: 50, textAlign: 'center',...FONTS.bodyLarge}}>
         It was your
       </Text>
       <Text
         style={{color: COLORS.blackSolid, textAlign: 'center', fontSize: 48}}>
         10th
       </Text>
-      <Text style={{color: COLORS.blackSolid, textAlign: 'center'}}>
+      <Text style={{color: COLORS.blackSolid, textAlign: 'center',...FONTS.bodyLarge}}>
         delivery today
       </Text>
       <Text
-        style={{color: COLORS.blackSolid, textAlign: 'center', marginTop: 133}}>
+        style={{
+          color: COLORS.blackSolid,
+          textAlign: 'center',
+          marginTop: 120,
+          ...FONTS.header1,
+        }}>
         Please grab your next{'\n'}order
       </Text>
 
       <View
         style={{
           flexDirection: 'row',
-          width: '100%',
-          // height: 50,
           justifyContent: 'space-evenly',
-  
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          paddingBottom: 30,
         }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('FinishScreen')}
+          // onPress={() => navigation.navigate('FinishScreen')}
           style={{
-            // height: 58,
             width: '55%',
             borderRadius: 9,
             borderWidth: 2,
@@ -50,8 +56,8 @@ const FinishScreen = () => {
             alignItems: 'center',
             backgroundColor: COLORS.whitePure,
           }}>
-          <Text style={[{color: '#795700'}, FONTS.buttonLarge]}>
-            Partly Delivered
+          <Text style={[{color: COLORS.black10}, FONTS.buttonLarge]}>
+            Keep me on hold
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -66,7 +72,7 @@ const FinishScreen = () => {
             backgroundColor: COLORS.primary,
           }}>
           <Text style={[{color: COLORS.whitePure}, FONTS.buttonLarge]}>
-            Delivered
+            I'm Ready
           </Text>
         </TouchableOpacity>
       </View>
@@ -75,3 +81,10 @@ const FinishScreen = () => {
 };
 
 export default FinishScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.whitePure,
+  },
+});

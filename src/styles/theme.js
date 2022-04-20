@@ -108,6 +108,11 @@ export const FONTS = {
     fontSize: 15,
     lineHeight: 18.15,
   },
+  bodyLarge: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 21,
+    lineHeight: 30.45,
+  },
   small: {
     fontFamily: 'Roboto-Medium',
     fontSize: 13,
@@ -147,6 +152,11 @@ export const FONTS = {
     fontFamily: 'Roboto-Bold',
     fontSize: 20,
     lineHeight: 29,
+  },
+  header5: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 28,
+    lineHeight: 40.6,
   },
   header3: {
     fontFamily: 'Roboto-Regular',
