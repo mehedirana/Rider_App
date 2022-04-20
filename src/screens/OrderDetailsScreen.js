@@ -20,7 +20,7 @@ import HorizontalLine from '../assets/images/svg/HorizontalLine';
 import VerticalLine from '../assets/images/svg/VerticalLine';
 import RNLocation from 'react-native-location';
 // import CircularProgress from 'react-native-circular-progress-indicator';
-// import CircularProgress from 'react-native-circular-progress-indicator';
+import CircularProgress from 'react-native-circular-progress-indicator';
 
 const {height, width} = Dimensions.get('window');
 
@@ -154,14 +154,15 @@ const OrderDetailsScreen = ({navigation}) => {
         <View
           // onPress={dialCall}
           style={{
-            width: '100%',
-            height: 100,
+            // width: '100%',
+            // height: 100,
             marginTop: 8,
             // backgroundColor: '#FAFAFA',
             paddingHorizontal: 9,
             paddingHorizontal: 8,
             borderRadius: 6,
             justifyContent: 'space-evenly',
+            flex:1
           }}>
           <Text style={[{color: COLORS.black, marginTop:10}, FONTS.bodyMedium,]}>
             Mohammad Saifuddin
@@ -194,19 +195,27 @@ const OrderDetailsScreen = ({navigation}) => {
             </Text>
           </TouchableOpacity>
         </View>
-
-        {/* <CircularProgress
+<View >
+        <CircularProgress
             value={60}
             radius={width * 0.18}
-            progressValueColor={'#ecf0f1'}
+            progressValueColor={'#4F4F4F'}
             activeStrokeColor={'#00EE4A'}
             inActiveStrokeColor={'#7AFBA8'}
             inActiveStrokeOpacity={0.1}
             inActiveStrokeWidth={30}
             activeStrokeWidth={10}
-            titleStyle={{fontSize: 10, top: Platform.OS == 'ios' ? -5 : -20}}
-            title={'ARRIVING IN'}
-          /> */}
+            titleStyle={{fontSize: 10, top: Platform.OS == 'ios' ? -5 : -15, color:'#4F4F4F'}}
+            title={'TIME LEFT'}
+            progressValueStyle={{fontSize:18}}
+            progressFormatter={(value) => {
+              'worklet';
+                
+              return value.toFixed(2); // 2 decimal places
+            }}
+      
+          />
+          </View>
         </View>
         <View style={{borderBottomWidth:1, borderColor:COLORS.gray, marginTop:17}}/>
         <Text style={{marginTop:10, ...FONTS.small,color:COLORS.gray}}>Special Instruction</Text>
