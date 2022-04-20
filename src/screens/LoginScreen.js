@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, createRef} from 'react';
 import {View, Text, StyleSheet, TextInput, Alert} from 'react-native';
 import CommonBtn from '../common/CommonBtn';
 import {driverLogin} from '../services/admin';
@@ -12,9 +12,12 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [messages, setMessages] = useState('');
   const [isPhoneUnfocus, setIsPhoneUnfocus] = useState(true);
+  const [isPasswordUnfocus, setIsPasswordUnfocus] = useState(true);
   const [isAvailable, setIsAvailable] = useState(false);
 
   const dispatch = useDispatch();
+
+  const phoneRef = createRef();
 
   const handleUserLogin = () => {
     const data = {
@@ -82,11 +85,7 @@ const LoginScreen = () => {
           style={[
             styles.input2,
             {
-              borderBottomColor: isPhoneUnfocus
-                ? '#C6C6C6'
-                : isAvailable
-                ? COLORS.primary
-                : COLORS.red,
+              borderBottomColor: isPhoneUnfocus ? '#C6C6C6' : COLORS.primary,
             },
           ]}
           onChangeText={phone => setPhone(phone)}
@@ -96,7 +95,7 @@ const LoginScreen = () => {
           onBlur={() => {
             setIsPhoneUnfocus(true);
           }}
-          // ref={phoneRef}
+          ref={phoneRef}
           value={phone}
           maxLength={11}
           // placeholder="01XXXXXXXXX"
@@ -124,14 +123,18 @@ const LoginScreen = () => {
               styles.input2,
               FONTS.body,
               {
-                borderBottomColor: isPhoneUnfocus
+                borderBottomColor: isPasswordUnfocus
                   ? '#C6C6C6'
-                  : isAvailable
-                  ? COLORS.primary
-                  : COLORS.red,
+                  : COLORS.primary,
               },
             ]}
             onChangeText={text => setPassword(text)}
+            onFocus={() => {
+              setIsPasswordUnfocus(false);
+            }}
+            onBlur={() => {
+              setIsPasswordUnfocus(true);
+            }}
             value={password}
             secureTextEntry={true}
             placeholder="*********"
