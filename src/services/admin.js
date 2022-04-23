@@ -41,3 +41,26 @@ export const driverLogin = async (data) => {
     }
 }
 
+
+export const refreshToken = async (data) => {
+    try {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json')
+
+        const requestOptions = {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        };
+
+        const response = await fetch(`${ADMIN_URL}/admin/token/refresh`, requestOptions);
+        const json = await response.json();
+        return json;
+
+    } catch (e) {
+        console.log('error in refresh token!', e);
+    }
+}
+
+
+
