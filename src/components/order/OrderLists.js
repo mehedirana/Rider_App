@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity,SafeAreaView, Dimensions } from 'react-native';
 import { COLORS, FONTS } from '../../styles/theme';
+
+const {height, width} = Dimensions.get('window')
 
 
 const OrderLists = ({ navigation, data }) => {
@@ -63,7 +65,7 @@ const OrderLists = ({ navigation, data }) => {
     );
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={data}
         renderItem={RenderAllOrdersList}
@@ -71,13 +73,14 @@ const OrderLists = ({ navigation, data }) => {
         ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
         contentContainerStyle={styles.contentContainer}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingBottom: height * 0.055
   },
   card: {
     flex: 1,

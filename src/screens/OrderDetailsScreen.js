@@ -6,7 +6,7 @@ import {
   Linking,
   Platform,
   ActivityIndicator,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLORS, FONTS} from '../styles/theme';
@@ -85,7 +85,7 @@ const OrderDetailsScreen = ({navigation}) => {
     RNLocation.requestPermission({
       ios: 'whenInUse',
       android: {
-        detail: 'coarse',
+        detail: 'fine',
         rationale: {
           title: 'We need to access your location',
           message: 'We use your location to show where you are on the map',
@@ -109,7 +109,11 @@ const OrderDetailsScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={[styles.topModal]}>
-        <HeaderText headerText="Order Details" headerRight="Cancel Delivery" navigation={navigation} />
+        <HeaderText
+          headerText="Order Details"
+          headerRight="Cancel Delivery"
+          navigation={navigation}
+        />
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>
             Order # GM2D36-51
@@ -119,7 +123,7 @@ const OrderDetailsScreen = ({navigation}) => {
         <View
           style={{
             backgroundColor: '#d1ffe180',
-            width:'100%',
+            width: '100%',
             // height: 32,
             marginTop: 14,
             flexDirection: 'row',
@@ -127,7 +131,7 @@ const OrderDetailsScreen = ({navigation}) => {
             alignItems: 'center',
             borderRadius: 11,
             paddingHorizontal: 10,
-            paddingVertical:8
+            paddingVertical: 8,
           }}>
           <Clock />
           <Text
@@ -148,78 +152,97 @@ const OrderDetailsScreen = ({navigation}) => {
             {`06:30PM`}
           </Text>
         </View>
-        <View style={{flexDirection:'row'}}>
-
-     
-        <View
-          // onPress={dialCall}
-          style={{
-            // width: '100%',
-            // height: 100,
-            marginTop: 8,
-            // backgroundColor: '#FAFAFA',
-            paddingHorizontal: 9,
-            paddingHorizontal: 8,
-            borderRadius: 6,
-            justifyContent: 'space-evenly',
-            flex:1
-          }}>
-          <Text style={[{color: COLORS.black, marginTop:10}, FONTS.bodyMedium,]}>
-            Mohammad Saifuddin
-          </Text>
+        <View style={{flexDirection: 'row'}}>
           <View
+            // onPress={dialCall}
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
+              // width: '100%',
+              // height: 100,
+              marginTop: 8,
+              // backgroundColor: '#FAFAFA',
+              paddingHorizontal: 9,
+              paddingHorizontal: 8,
+              borderRadius: 6,
+              justifyContent: 'space-evenly',
+              flex: 1,
             }}>
-            {/* <MapLocator /> */}
-            <Text style={[{color: COLORS.gray, marginTop:10}, FONTS.small]}>
-              Harvest Group, DITF Bangladesh 14 Pavilion Golen, Dhaka-1212
-            </Text>
-          </View>
-          <TouchableOpacity
-          onPress={dialCall}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              backgroundColor:COLORS.primary,
-              marginTop:12,
-              borderRadius:9,
-              paddingHorizontal:10,
-              width:width * .35
-            }}>
-            <Phone color={COLORS.whitePure} />
             <Text
-              style={[{color: COLORS.whitePure, paddingLeft: 6, paddingVertical:10}, FONTS.smallBold]}>
-              01756 236 365
+              style={[{color: COLORS.black, marginTop: 10}, FONTS.bodyMedium]}>
+              Mohammad Saifuddin
             </Text>
-          </TouchableOpacity>
-        </View>
-<View >
-        <CircularProgress
-            value={60}
-            radius={width * 0.18}
-            progressValueColor={'#4F4F4F'}
-            activeStrokeColor={'#00EE4A'}
-            inActiveStrokeColor={'#7AFBA8'}
-            inActiveStrokeOpacity={0.1}
-            inActiveStrokeWidth={30}
-            activeStrokeWidth={10}
-            titleStyle={{fontSize: 10, top: Platform.OS == 'ios' ? -5 : -15, color:'#4F4F4F'}}
-            title={'TIME LEFT'}
-            progressValueStyle={{fontSize:18}}
-            progressFormatter={(value) => {
-              'worklet';
-                
-              return value.toFixed(2); // 2 decimal places
-            }}
-      
-          />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              {/* <MapLocator /> */}
+              <Text style={[{color: COLORS.gray, marginTop: 10}, FONTS.small]}>
+                Harvest Group, DITF Bangladesh 14 Pavilion Golen, Dhaka-1212
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={dialCall}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: COLORS.primary,
+                marginTop: 12,
+                borderRadius: 9,
+                paddingHorizontal: 10,
+                width: width * 0.35,
+              }}>
+              <Phone color={COLORS.whitePure} />
+              <Text
+                style={[
+                  {
+                    color: COLORS.whitePure,
+                    paddingLeft: 6,
+                    paddingVertical: 10,
+                  },
+                  FONTS.smallBold,
+                ]}>
+                01756 236 365
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <CircularProgress
+              value={60}
+              radius={width * 0.18}
+              progressValueColor={'#4F4F4F'}
+              activeStrokeColor={'#00EE4A'}
+              inActiveStrokeColor={'#7AFBA8'}
+              inActiveStrokeOpacity={0.1}
+              inActiveStrokeWidth={30}
+              activeStrokeWidth={10}
+              titleStyle={{
+                fontSize: 10,
+                top: Platform.OS == 'ios' ? -5 : -15,
+                color: '#4F4F4F',
+              }}
+              title={'TIME LEFT'}
+              progressValueStyle={{fontSize: 18}}
+              progressFormatter={value => {
+                'worklet';
+
+                return value.toFixed(2); // 2 decimal places
+              }}
+            />
           </View>
         </View>
-        <View style={{borderBottomWidth:1, borderColor:COLORS.gray, marginTop:17}}/>
-        <Text style={{marginTop:10, ...FONTS.small,color:COLORS.gray}}>Special Instruction</Text>
-        <Text style={{marginTop:3, ...FONTS.body,color:COLORS.black50}}>Ask the security guard for Mr. Naim</Text>
+        <View
+          style={{
+            borderBottomWidth: 1,
+            borderColor: COLORS.gray,
+            marginTop: 17,
+          }}
+        />
+        <Text style={{marginTop: 10, ...FONTS.small, color: COLORS.gray}}>
+          Special Instruction
+        </Text>
+        <Text style={{marginTop: 3, ...FONTS.body, color: COLORS.black50}}>
+          Ask the security guard for Mr. Naim
+        </Text>
       </View>
 
       <MapView
@@ -304,7 +327,7 @@ const OrderDetailsScreen = ({navigation}) => {
             </Text>
             <Text
               style={[
-                {color: COLORS.primary, marginRight: 5, marginTop:2},
+                {color: COLORS.primary, marginRight: 5, marginTop: 2},
                 FONTS.xtraSmall,
               ]}>
               Collect Cash from customer
@@ -331,10 +354,9 @@ const OrderDetailsScreen = ({navigation}) => {
             width: '100%',
             // height: 50,
             justifyContent: 'space-evenly',
-     
           }}>
           <TouchableOpacity
-          onPress={()=> navigation.navigate('PartyOrderScreen')}
+            onPress={() => navigation.navigate('PartyOrderScreen')}
             style={{
               // height: 58,
               width: '55%',
@@ -388,7 +410,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.whitePure,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    paddingBottom:20
+    paddingBottom: 20,
   },
   bottomModal: {
     alignItems: 'center',
@@ -396,6 +418,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingHorizontal: 15,
-    paddingBottom:20
+    paddingBottom: 20,
   },
 });

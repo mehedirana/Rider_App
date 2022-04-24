@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet,SafeAreaView} from 'react-native';
 import OpenOrderHeader from '../components/header/OpenOrderHeader';
 import OrderLists from '../components/order/OrderLists';
 import { ordersData } from '../dummy-data/rawData';
@@ -7,13 +7,13 @@ import { COLORS } from '../styles/theme';
 
 const OpenOrderScreen = ({navigation}) => {
   return (
-    <View style={styles.conatainer}>
+    <SafeAreaView style={styles.conatainer}>
       <OpenOrderHeader />
       
       <View style={styles.orderList}>
         <OrderLists navigation={navigation} data={ordersData} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

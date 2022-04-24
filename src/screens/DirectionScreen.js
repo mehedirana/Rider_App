@@ -13,11 +13,15 @@ const DirectionScreen = ({ route, navigation }) => {
     const mapRef = useRef(null)
 
     const [latLong, setLatLong] = useState({
-        latitude: 23.781634584964543,
-        longitude: 90.3752835692889,
+        // latitude: 23.781634584964543,
+        // longitude: 90.3752835692889,
+        latitude: 23.80758460,
+        longitude: 90.42792730,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
     });
+
+   
 
     return (
         <View style={styles.container}>
@@ -54,7 +58,7 @@ const DirectionScreen = ({ route, navigation }) => {
                                 bottom: (height / 20),
                                 left: (width / 20),
                                 top: (height / 20),
-                                animated: true
+                                animated: true,
                             }
                         })
                     }}
