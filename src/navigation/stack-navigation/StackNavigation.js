@@ -9,6 +9,7 @@ import PartlyOrderDetailsScreen from '../../screens/PartlyOrderDetailsScreen';
 import FinishScreen from '../../screens/FinishScreen';
 import LoginScreen from '../../screens/LoginScreen';
 import { useSelector } from 'react-redux';
+import PlaygroundScreen from '../../screens/PlaygroundScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,7 @@ const StackNavigation = () => {
               component={PartlyOrderDetailsScreen}
             />
             <Stack.Screen name="FinishScreen" component={FinishScreen} />
+            <Stack.Screen name="Playground" component={PlaygroundScreen} />
           </>
         )}
       </Stack.Navigator>

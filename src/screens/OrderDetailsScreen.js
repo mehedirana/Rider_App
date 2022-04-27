@@ -19,7 +19,6 @@ import DirectionArrow from '../assets/images/DirectionArrow';
 import HorizontalLine from '../assets/images/svg/HorizontalLine';
 import VerticalLine from '../assets/images/svg/VerticalLine';
 import RNLocation from 'react-native-location';
-// import CircularProgress from 'react-native-circular-progress-indicator';
 import CircularProgress from 'react-native-circular-progress-indicator';
 
 const {height, width} = Dimensions.get('window');
@@ -35,19 +34,38 @@ const OrderDetailsScreen = ({navigation}) => {
   const [crntlatLong, setCrntlatLong] = useState(null);
 
   useEffect(() => {
-    let test = false;
+
     handlePermission();
     // handleCurrentLocation()
-
-    return () => (test = true);
+    // return () => {
+    //   setCrntlatLong(null)
+    // }
   }, [crntlatLong]);
 
   const handleDirection = () => {
     // handleCurrentLocation()
-    navigation.navigate('DirectionScreen', {
-      latitude: crntlatLong[0].latitude,
-      longitude: crntlatLong[0].longitude,
-    });
+    // navigation.navigate('DirectionScreen', {
+    //   latitude: crntlatLong[0].latitude,
+    //   longitude: crntlatLong[0].longitude,
+    // });
+    // navigation.navigate('Playground', {
+    //   latitude: crntlatLong[0].latitude,
+    //   longitude: crntlatLong[0].longitude,
+    // });
+
+
+    const desLat = 23.8075846
+    const desLong = 90.4279273
+    const url = `https://www.google.com/maps/dir/?api=1&origin=` +
+    crntlatLong[0].latitude +
+    `,` +
+    crntlatLong[0].longitude +
+    `&destination=` +
+    desLat +
+    `,` +
+    desLong +
+    `&travelmode=driving`
+   if(crntlatLong[0].latitude, crntlatLong[0].longitude) Linking.openURL(url);
   };
 
   const dialCall = () => {
@@ -190,14 +208,14 @@ const OrderDetailsScreen = ({navigation}) => {
                 borderRadius: 9,
                 paddingHorizontal: 10,
                 width: width * 0.35,
+                paddingVertical:8
               }}>
               <Phone color={COLORS.whitePure} />
               <Text
                 style={[
                   {
                     color: COLORS.whitePure,
-                    paddingLeft: 6,
-                    paddingVertical: 10,
+                    marginLeft:3
                   },
                   FONTS.smallBold,
                 ]}>
@@ -286,26 +304,27 @@ const OrderDetailsScreen = ({navigation}) => {
         <View
           style={{
             width: '100%',
-            padding: 12,
+            // padding: 8,
             flexDirection: 'row',
             justifyContent: 'space-between',
             backgroundColor: COLORS.lightGray10,
+            paddingHorizontal:10
           }}>
           <View style={styles.cards}>
             <Text style={[{color: COLORS.gray}, FONTS.small]}>Sub-Total</Text>
-            <Text style={[{color: COLORS.black}, FONTS.header1]}>৳ 630</Text>
+            <Text style={[{color: COLORS.black}, FONTS.header3]}>৳ 630</Text>
           </View>
           <VerticalLine />
           <View style={styles.cards}>
             <Text style={[{color: COLORS.gray}, FONTS.small]}>
-              Delivery Charge
+              Shipping
             </Text>
-            <Text style={[{color: COLORS.black}, FONTS.header1]}>৳ 30</Text>
+            <Text style={[{color: COLORS.black}, FONTS.header3]}>৳ 30</Text>
           </View>
           <VerticalLine />
           <View style={styles.cards}>
-            <Text style={[{color: COLORS.gray}, FONTS.small]}>Receivable</Text>
-            <Text style={[{color: COLORS.primary}, FONTS.header1]}>৳ 660</Text>
+            <Text style={[{color: COLORS.gray, textAlign:'right'}, FONTS.small]}>Receivable</Text>
+            <Text style={[{color: COLORS.primary, textAlign:'right'}, FONTS.header3]}>৳ 660</Text>
           </View>
         </View>
         <HorizontalLine />
@@ -328,7 +347,7 @@ const OrderDetailsScreen = ({navigation}) => {
             <Text
               style={[
                 {color: COLORS.primary, marginRight: 5, marginTop: 2},
-                FONTS.xtraSmall,
+                FONTS.small,
               ]}>
               Collect Cash from customer
             </Text>
@@ -338,12 +357,12 @@ const OrderDetailsScreen = ({navigation}) => {
               height: 40,
               width: 130,
               borderRadius: 9,
-              borderWidth: 2,
-              borderColor: COLORS.lightGray,
+              borderWidth: 1,
+              borderColor: COLORS.lightGray50,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={[{color: COLORS.black}, FONTS.bodyBold]}>
+            <Text style={[{color: COLORS.black}, FONTS.small]}>
               Cash On Delivery
             </Text>
           </View>
@@ -403,7 +422,7 @@ const styles = StyleSheet.create({
   },
   cards: {
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   topModal: {
     paddingHorizontal: 20,

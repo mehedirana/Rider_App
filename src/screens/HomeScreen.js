@@ -17,7 +17,7 @@ const {height, width} = Dimensions.get('window');
 const HomeScreen = () => {
   const { user } = useSelector(e => e.userState);
 
-  console.log(user);
+  // console.log(user);
   return (
     <View style={styles.container}>
       <View

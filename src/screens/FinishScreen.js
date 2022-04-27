@@ -45,7 +45,7 @@ const FinishScreen = () => {
           right: 0,
           paddingBottom: 30,
         }}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           // onPress={() => navigation.navigate('FinishScreen')}
           style={{
             width: '55%',
@@ -59,7 +59,7 @@ const FinishScreen = () => {
           <Text style={[{color: COLORS.black10}, FONTS.buttonLarge]}>
             Keep me on hold
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           style={{
             height: 58,
