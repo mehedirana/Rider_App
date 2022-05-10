@@ -7,6 +7,7 @@ import {
   Platform,
   ActivityIndicator,
   Dimensions,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLORS, FONTS} from '../styles/theme';
@@ -20,10 +21,18 @@ import HorizontalLine from '../assets/images/svg/HorizontalLine';
 import VerticalLine from '../assets/images/svg/VerticalLine';
 import RNLocation from 'react-native-location';
 import CircularProgress from 'react-native-circular-progress-indicator';
+import {driverUpdateStatus} from '../services/sales-order/salesOrder';
+import {useDispatch, useSelector} from 'react-redux';
 
 const {height, width} = Dimensions.get('window');
 
-const OrderDetailsScreen = ({navigation}) => {
+const OrderDetailsScreen = ({navigation, route}) => {
+  const {data} = route.params;
+
+  const {user} = useSelector(e => e.userState);
+
+  const dispatch = useDispatch();
+
   const [latLong, setLatLong] = useState({
     latitude: 23.781634584964543,
     longitude: 90.3752835692889,
@@ -33,12 +42,9 @@ const OrderDetailsScreen = ({navigation}) => {
 
   const [crntlatLong, setCrntlatLong] = useState(null);
 
-  
-
   useEffect(() => {
-
-    handlePermission();
-    // handleCurrentLocation()
+    // handlePermission();
+    handleCurrentLocation();
     // return () => {
     //   setCrntlatLong(null)
     // }
@@ -55,19 +61,20 @@ const OrderDetailsScreen = ({navigation}) => {
     //   longitude: crntlatLong[0].longitude,
     // });
 
-
-    const desLat = 23.8075846
-    const desLong = 90.4279273
-    const url = `https://www.google.com/maps/dir/?api=1&origin=` +
-    crntlatLong[0].latitude +
-    `,` +
-    crntlatLong[0].longitude +
-    `&destination=` +
-    desLat +
-    `,` +
-    desLong +
-    `&travelmode=driving`
-   if(crntlatLong[0].latitude, crntlatLong[0].longitude) Linking.openURL(url);
+    const desLat = 23.8075846;
+    const desLong = 90.4279273;
+    const url =
+      `https://www.google.com/maps/dir/?api=1&origin=` +
+      crntlatLong[0].latitude +
+      `,` +
+      crntlatLong[0].longitude +
+      `&destination=` +
+      desLat +
+      `,` +
+      desLong +
+      `&travelmode=driving`;
+    if ((crntlatLong[0].latitude, crntlatLong[0].longitude))
+      Linking.openURL(url);
   };
 
   const dialCall = () => {
@@ -126,6 +133,60 @@ const OrderDetailsScreen = ({navigation}) => {
     });
   };
 
+  const updateLocalUser = data => {
+    dispatch(userLogIn(data));
+  };
+
+  const handleCancelOrder = () => {
+    const req = {};
+    req.id = data?.id;
+    req.order_status_id = 'CANCELLED';
+
+    driverUpdateStatus(req, user, user?.access_token, updateLocalUser)
+      .then(res => {
+        if (res?.success) {
+          alert('Cancel Order Successfully!');
+        } else {
+          Alert.alert('Error', res?.error_message, [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+      })
+      .catch(e => {
+        console.log('error API', e);
+      });
+  };
+
+  const handleDeliveredOrder = () => {
+    const req = {};
+    req.id = data?.id;
+    req.order_status_id = 'DELIVERED';
+
+    driverUpdateStatus(req, user, user?.access_token, updateLocalUser)
+      .then(res => {
+        if (res?.success) {
+          alert('Order Delivered Successfully!');
+        } else {
+          Alert.alert('Error', res?.error_message, [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+      })
+      .catch(e => {
+        console.log('error API', e);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <View style={[styles.topModal]}>
@@ -133,12 +194,15 @@ const OrderDetailsScreen = ({navigation}) => {
           headerText="Order Details"
           headerRight="Cancel Delivery"
           navigation={navigation}
+          onPress={handleCancelOrder}
         />
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>
-            Order # GM2D36-51
+            Order # {data?.id}
           </Text>
-          <Text style={[{color: COLORS.gray}, FONTS.small]}>5 mins ago</Text>
+          <Text style={[{color: COLORS.gray}, FONTS.small]}>
+            {data?.created_at}
+          </Text>
         </View>
         <View
           style={{
@@ -169,7 +233,8 @@ const OrderDetailsScreen = ({navigation}) => {
           </Text>
           <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>{`|`}</Text>
           <Text style={[{color: COLORS.black}, FONTS.bodyBold]}>
-            {`06:30PM`}
+            {/* {`06:30PM`} */}
+            {data?.estimated_delivery_at}
           </Text>
         </View>
         <View style={{flexDirection: 'row'}}>
@@ -188,7 +253,7 @@ const OrderDetailsScreen = ({navigation}) => {
             }}>
             <Text
               style={[{color: COLORS.black, marginTop: 10}, FONTS.bodyMedium]}>
-              Mohammad Saifuddin
+              {data?.delivery_name}
             </Text>
             <View
               style={{
@@ -197,7 +262,12 @@ const OrderDetailsScreen = ({navigation}) => {
               }}>
               {/* <MapLocator /> */}
               <Text style={[{color: COLORS.gray, marginTop: 10}, FONTS.small]}>
-                Harvest Group, DITF Bangladesh 14 Pavilion Golen, Dhaka-1212
+                {/* Harvest Group, DITF Bangladesh 14 Pavilion Golen, Dhaka-1212 */}
+                {data?.delivery_apartment +
+                  data?.delivery_floor +
+                  data?.delivery_address1 +
+                  data?.delivery_address2 +
+                  data?.delivery_postal_code}
               </Text>
             </View>
             <TouchableOpacity
@@ -210,18 +280,18 @@ const OrderDetailsScreen = ({navigation}) => {
                 borderRadius: 9,
                 paddingHorizontal: 10,
                 width: width * 0.35,
-                paddingVertical:8
+                paddingVertical: 8,
               }}>
               <Phone color={COLORS.whitePure} />
               <Text
                 style={[
                   {
                     color: COLORS.whitePure,
-                    marginLeft:3
+                    marginLeft: 3,
                   },
                   FONTS.smallBold,
                 ]}>
-                01756 236 365
+                {data?.delivery_phone_number}
               </Text>
             </TouchableOpacity>
           </View>
@@ -250,6 +320,7 @@ const OrderDetailsScreen = ({navigation}) => {
             />
           </View>
         </View>
+
         <View
           style={{
             borderBottomWidth: 1,
@@ -257,18 +328,24 @@ const OrderDetailsScreen = ({navigation}) => {
             marginTop: 17,
           }}
         />
-        <Text style={{marginTop: 10, ...FONTS.small, color: COLORS.gray}}>
-          Special Instruction
-        </Text>
-        <Text style={{marginTop: 3, ...FONTS.body, color: COLORS.black50}}>
-          Ask the security guard for Mr. Naim
-        </Text>
+
+        {data?.delivery_instruction && (
+          <>
+            <Text style={{marginTop: 10, ...FONTS.small, color: COLORS.gray}}>
+              Special Instruction
+            </Text>
+            <Text style={{marginTop: 3, ...FONTS.body, color: COLORS.black50}}>
+              {/* Ask the security guard for Mr. Naim */}
+              {data?.delivery_instruction}
+            </Text>
+          </>
+        )}
       </View>
 
       <MapView
         style={styles.mapStyle}
         provider="google"
-        initialRegion={latLong}
+        // initialRegion={latLong}
         showsMyLocationButton={true}
         showsUserLocation={true}>
         <Marker
@@ -310,23 +387,34 @@ const OrderDetailsScreen = ({navigation}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             backgroundColor: COLORS.lightGray10,
-            paddingHorizontal:10
+            paddingHorizontal: 10,
           }}>
           <View style={styles.cards}>
             <Text style={[{color: COLORS.gray}, FONTS.small]}>Sub-Total</Text>
-            <Text style={[{color: COLORS.black}, FONTS.header3]}>৳ 630</Text>
-          </View>
-          <VerticalLine />
-          <View style={styles.cards}>
-            <Text style={[{color: COLORS.gray}, FONTS.small]}>
-              Shipping
+            <Text style={[{color: COLORS.black}, FONTS.header3]}>
+              ৳ {data?.sub_total}
             </Text>
-            <Text style={[{color: COLORS.black}, FONTS.header3]}>৳ 30</Text>
           </View>
           <VerticalLine />
           <View style={styles.cards}>
-            <Text style={[{color: COLORS.gray, textAlign:'right'}, FONTS.small]}>Receivable</Text>
-            <Text style={[{color: COLORS.primary, textAlign:'right'}, FONTS.header3]}>৳ 660</Text>
+            <Text style={[{color: COLORS.gray}, FONTS.small]}>Shipping</Text>
+            <Text style={[{color: COLORS.black}, FONTS.header3]}>
+              ৳ {data?.shipping_total}
+            </Text>
+          </View>
+          <VerticalLine />
+          <View style={styles.cards}>
+            <Text
+              style={[{color: COLORS.gray, textAlign: 'right'}, FONTS.small]}>
+              Receivable
+            </Text>
+            <Text
+              style={[
+                {color: COLORS.primary, textAlign: 'right'},
+                FONTS.header3,
+              ]}>
+              ৳ {Number(data?.sub_total) + Number(data?.shipping_total)}
+            </Text>
           </View>
         </View>
         <HorizontalLine />
@@ -377,7 +465,9 @@ const OrderDetailsScreen = ({navigation}) => {
             justifyContent: 'space-evenly',
           }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('PartyOrderScreen')}
+            onPress={() =>
+              navigation.navigate('PartyOrderScreen', {data: data})
+            }
             style={{
               // height: 58,
               width: '55%',
@@ -389,10 +479,11 @@ const OrderDetailsScreen = ({navigation}) => {
               backgroundColor: '#FFF8B9',
             }}>
             <Text style={[{color: '#795700'}, FONTS.buttonLarge]}>
-              Partly Return
+              Partly Delivered
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => handleDeliveredOrder()}
             style={{
               height: 58,
               width: '35%',

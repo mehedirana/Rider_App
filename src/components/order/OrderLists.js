@@ -40,7 +40,7 @@ const OrderLists = ({navigation, data}) => {
       .then(res => {
         if (res?.success) {
           setLoading(false);
-          navigation.navigate('OrderDetails');
+          navigation.navigate('OrderDetails',{data: item});
         } else {
           setLoading(false);
           Alert.alert('Error', res?.error_message, [
@@ -51,7 +51,7 @@ const OrderLists = ({navigation, data}) => {
             },
             {text: 'OK', onPress: () => console.log('OK Pressed')},
           ]);
-          console.log(res?.error_message);
+ 
         }
       })
       .catch(e => {
@@ -66,7 +66,7 @@ const OrderLists = ({navigation, data}) => {
     // console.log(item);
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('OrderDetails')}
+        onPress={() => navigation.navigate('OrderDetails',{data: item})}
         style={styles.card}>
         <View style={styles.headerContainer}>
           <Text style={[{color: COLORS.gray}, FONTS.xtraSmall]}>
