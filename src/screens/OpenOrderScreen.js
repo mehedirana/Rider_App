@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import {View, Text, StyleSheet, SafeAreaView, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import OpenOrderHeader from '../components/header/OpenOrderHeader';
 import OrderLists from '../components/order/OrderLists';
@@ -16,7 +16,6 @@ const OpenOrderScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
   const updateLocalUser = data => {
-    console.log('--------', data);
     dispatch(userLogIn(data));
   };
 
@@ -25,8 +24,15 @@ const OpenOrderScreen = ({navigation}) => {
       .then(res => {
         if (res.success) {
           setdata(res?.data?.orders);
-          console.log(res?.data?.orders, '---------->   res...........');
         } else {
+          Alert.alert("Error", res?.error_message,[
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')}
+          ])
         }
       })
       .catch(e => {

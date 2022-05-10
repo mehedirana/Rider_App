@@ -7,15 +7,57 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Dimensions,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {driverAcceptOrRejectOrder} from '../../services/sales-order/salesOrder';
 import {COLORS, FONTS} from '../../styles/theme';
 
 const {height, width} = Dimensions.get('window');
 
 const OrderLists = ({navigation, data}) => {
+  const [loading, setLoading] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const {user} = useSelector(e => e.userState);
+
+  const dispatch = useDispatch();
+
+  const updateLocalUser = data => {
+    dispatch(userLogIn(data));
+  };
+
   const handleAcceptOrder = item => {
-    // console.log('============>', item)
-    navigation.navigate('OrderDetails');
+    setSelectedId(item?.id);
+    setLoading(true);
+
+    const req = {};
+    req.id = item?.id;
+    req.driver_accepted = true;
+
+    driverAcceptOrRejectOrder(req, user, user?.access_token, updateLocalUser)
+      .then(res => {
+        if (res?.success) {
+          setLoading(false);
+          navigation.navigate('OrderDetails');
+        } else {
+          setLoading(false);
+          Alert.alert('Error', res?.error_message, [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+          console.log(res?.error_message);
+        }
+      })
+      .catch(e => {
+        console.log('error API', e, req);
+      });
+    // navigation.navigate('OrderDetails');
   };
 
   const handleCancelOrder = item => {};
@@ -23,7 +65,9 @@ const OrderLists = ({navigation, data}) => {
   const RenderAllOrdersList = ({item, index}) => {
     // console.log(item);
     return (
-      <TouchableOpacity style={styles.card}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('OrderDetails')}
+        style={styles.card}>
         <View style={styles.headerContainer}>
           <Text style={[{color: COLORS.gray}, FONTS.xtraSmall]}>
             {item?.delivered_at}
@@ -44,11 +88,13 @@ const OrderLists = ({navigation, data}) => {
             item?.delivery_address2 +
             item?.delivery_postal_code}
         </Text>
-        <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={{color: COLORS.black, marginTop: 6}}>
             {item?.delivery_phone_number}
           </Text>
-          <Text style={{color: COLORS.gray, marginTop: 6}}>{item?.payment_method_id}</Text>
+          <Text style={{color: COLORS.gray, marginTop: 6}}>
+            {item?.payment_method_id}
+          </Text>
         </View>
 
         <View style={styles.placeHolderContainer} />
@@ -69,6 +115,9 @@ const OrderLists = ({navigation, data}) => {
                 },
                 styles.trackOrderTxt,
               ]}>
+              {loading && item?.id === selectedId ? (
+                <ActivityIndicator color={COLORS.whitePure} />
+              ) : null}{' '}
               ACCEPT
             </Text>
           </TouchableOpacity>
