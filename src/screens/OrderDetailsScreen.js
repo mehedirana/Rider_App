@@ -33,6 +33,8 @@ const OrderDetailsScreen = ({navigation}) => {
 
   const [crntlatLong, setCrntlatLong] = useState(null);
 
+  
+
   useEffect(() => {
 
     handlePermission();
