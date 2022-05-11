@@ -1,23 +1,59 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ImageBackground,
   Dimensions,
+  Alert,
 } from 'react-native';
 import {NotificationIcon} from '../assets/images/svg/NotificationIcon';
 import HomeCard from '../components/home/HomeCard';
 import {COLORS, FONTS} from '../styles/theme';
-import { useSelector } from 'react-redux';
+import {getStats} from '../services/sales-order/salesOrder';
+import {useDispatch, useSelector} from 'react-redux';
 
 const backgroundImg = require('../assets/images/cityBackground.png');
 
 const {height, width} = Dimensions.get('window');
 const HomeScreen = () => {
-  const { user } = useSelector(e => e.userState);
+  const [data, setdata] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // console.log(user);
+  const {user} = useSelector(e => e.userState);
+
+  const dispatch = useDispatch();
+
+  const updateLocalUser = data => {
+    dispatch(userLogIn(data));
+  };
+
+  useEffect(() => {
+    getStats(user, user?.access_token, updateLocalUser)
+      .then(res => {
+        setLoading(true);
+
+        if (res.success) {
+          setdata(res?.data);
+          setLoading(false);
+        } else {
+          Alert.alert('Error', res?.error_message, [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+
+          setLoading(false);
+        }
+      })
+      .catch(e => {
+        console.log('error API', e);
+      });
+  }, []);
+
   return (
     <View style={styles.container}>
       <View
@@ -44,33 +80,35 @@ const HomeScreen = () => {
       <Text style={{marginTop: 4, color: COLORS.black, ...FONTS.bodyMedium}}>
         Let’s deliver the best today!
       </Text>
-      <View style={{flexDirection: 'row', justifyContent:'center', marginTop:42}}>
+      <View
+        style={{flexDirection: 'row', justifyContent: 'center', marginTop: 42}}>
         <HomeCard
           title={'Open'}
-          subTitle={'3 orders waiting to be delivered '}
+          subTitle={`${data?.open_today} orders waiting to be delivered `}
           subTitleColor={'#009E36'}
           style={{backgroundColor: '#E2FFED', width: '40%'}}
           type={1}
         />
         <HomeCard
           title={'Recent'}
-          subTitle={'3 recently delivered'}
+          subTitle={`${data?.delivered_today} recently delivered`}
           subTitleColor={'#0050B8'}
           style={{backgroundColor: '#E2F5FF', marginLeft: 20}}
           type={2}
         />
       </View>
-      <View style={{flexDirection: 'row', marginTop: 20, justifyContent:'center'}}>
+      <View
+        style={{flexDirection: 'row', marginTop: 20, justifyContent: 'center'}}>
         <HomeCard
           title={'All Orders'}
-          subTitle={'30 orders are delivered'}
+          subTitle={`${data?.delivered_total} orders are delivered`}
           subTitleColor={'#935800'}
           style={{backgroundColor: '#FFF6E9'}}
           type={3}
         />
         <HomeCard
           title={'Canceled'}
-          subTitle={'2 orders were cancelled'}
+          subTitle={`${data?.cancelled_today} orders were cancelled`}
           subTitleColor={'#CC1B16'}
           style={{backgroundColor: '#FFEAEA', marginLeft: 20}}
           type={4}
