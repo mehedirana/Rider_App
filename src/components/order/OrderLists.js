@@ -13,6 +13,8 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {driverAcceptOrRejectOrder} from '../../services/sales-order/salesOrder';
 import {COLORS, FONTS} from '../../styles/theme';
+import MonthLists from '../../utils/constants/month.json';
+import { formatedTime } from '../../utils/timeFormate';
 
 const {height, width} = Dimensions.get('window');
 
@@ -70,7 +72,7 @@ const OrderLists = ({navigation, data}) => {
         style={styles.card}>
         <View style={styles.headerContainer}>
           <Text style={[{color: COLORS.gray}, FONTS.xtraSmall]}>
-            {item?.delivered_at}
+            {formatedTime(item?.delivered_at)}
           </Text>
           <Text style={[FONTS.small, styles.orderStatusTxt]}>
             {item?.order_status_id}

@@ -1,5 +1,5 @@
 import React, {useState, createRef} from 'react';
-import {View, Text, StyleSheet, TextInput, Alert} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Alert, LogBox} from 'react-native';
 import CommonBtn from '../common/CommonBtn';
 import {driverLogin} from '../services/admin';
 import {userLogIn} from '../store/auth/userAction';
@@ -18,6 +18,10 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
 
   const phoneRef = createRef();
+
+  LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
+  LogBox.ignoreAllLogs(); //Ignore all log notifications
 
   const handleUserLogin = () => {
     const data = {

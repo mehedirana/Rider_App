@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {COLORS, FONTS} from '../styles/theme';
 
-const FinishScreen = () => {
+const FinishScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Text
@@ -61,6 +61,7 @@ const FinishScreen = () => {
           </Text>
         </TouchableOpacity> */}
         <TouchableOpacity
+        onPress={()=> navigation.navigate('Home')}
           style={{
             height: 58,
             width: '35%',
