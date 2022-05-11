@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Dimensions,
   Alert,
+
 } from 'react-native';
 import {NotificationIcon} from '../assets/images/svg/NotificationIcon';
 import HomeCard from '../components/home/HomeCard';
@@ -52,6 +53,7 @@ const HomeScreen = () => {
       .catch(e => {
         console.log('error API', e);
       });
+
   }, []);
 
   return (
