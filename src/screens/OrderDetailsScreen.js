@@ -1,3 +1,4 @@
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -7,8 +8,8 @@ import {
   Platform,
   ActivityIndicator,
   Dimensions,
+  Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
 import {COLORS, FONTS} from '../styles/theme';
 import HeaderText from '../components/header/HeaderText';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
@@ -20,29 +21,93 @@ import HorizontalLine from '../assets/images/svg/HorizontalLine';
 import VerticalLine from '../assets/images/svg/VerticalLine';
 import RNLocation from 'react-native-location';
 import CircularProgress from 'react-native-circular-progress-indicator';
+import {driverUpdateStatus} from '../services/sales-order/salesOrder';
+import {useDispatch, useSelector} from 'react-redux';
+import Geolocation from 'react-native-geolocation-service';
 
 const {height, width} = Dimensions.get('window');
 
-const OrderDetailsScreen = ({navigation}) => {
+const OrderDetailsScreen = ({navigation, route}) => {
+  const refMap = useRef(null);
+
+  const {data} = route.params;
+
+  const {user} = useSelector(e => e.userState);
+
+  const dispatch = useDispatch();
+
   const [latLong, setLatLong] = useState({
-    latitude: 23.781634584964543,
-    longitude: 90.3752835692889,
+    latitude: data?.delivery_address_lat
+      ? Number(data?.delivery_address_lat)
+      : 23.781634584964543,
+    longitude: data?.delivery_address_lng
+      ? Number(data?.delivery_address_lng)
+      : 90.3752835692889,
     latitudeDelta: 0.006,
     longitudeDelta: 0.006,
   });
 
   const [crntlatLong, setCrntlatLong] = useState(null);
 
-  
+  console.log(crntlatLong, latLong);
 
   useEffect(() => {
+    // handlePermission();
 
-    handlePermission();
-    // handleCurrentLocation()
+    // handleCurrentLocation();
     // return () => {
     //   setCrntlatLong(null)
     // }
-  }, [crntlatLong]);
+
+    RNLocation.configure({
+      distanceFilter: 100, // Meters
+      desiredAccuracy: {
+        ios: 'best',
+        android: 'balancedPowerAccuracy',
+      },
+      // Android only
+      // androidProvider: 'auto',
+      androidProvider: 'standard',
+      interval: 5000, // Milliseconds
+      fastestInterval: 10000, // Milliseconds
+      maxWaitTime: 5000, // Milliseconds
+    });
+
+    RNLocation.requestPermission({
+      // ios: 'whenInUse',
+      ios: 'always',
+      android: {
+        detail: 'fine',
+        rationale: {
+          title: 'We need to access your location',
+          message: 'We use your location to show where you are on the map',
+          buttonPositive: 'OK',
+          buttonNegative: 'Cancel',
+        },
+      },
+    }).then(granted => {
+      if (granted) {
+        handleCurrentLocation();
+      } else {
+        ToastAndroid.showWithGravity(
+          'Loction permission is not provided!',
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
+      }
+    });
+
+    setCrntlatLong(
+      crntlatLong == null
+        ? {
+            latitude: 23.783783291592798,
+            latitudeDelta: 0.007412653159978078,
+            longitude: 90.41755339130759,
+            longitudeDelta: 0.004000179469585419,
+          }
+        : crntlatLong,
+    );
+  }, []);
 
   const handleDirection = () => {
     // handleCurrentLocation()
@@ -55,19 +120,19 @@ const OrderDetailsScreen = ({navigation}) => {
     //   longitude: crntlatLong[0].longitude,
     // });
 
-
-    const desLat = 23.8075846
-    const desLong = 90.4279273
-    const url = `https://www.google.com/maps/dir/?api=1&origin=` +
-    crntlatLong[0].latitude +
-    `,` +
-    crntlatLong[0].longitude +
-    `&destination=` +
-    desLat +
-    `,` +
-    desLong +
-    `&travelmode=driving`
-   if(crntlatLong[0].latitude, crntlatLong[0].longitude) Linking.openURL(url);
+    const desLat = 23.8075846;
+    const desLong = 90.4279273;
+    const url =
+      `https://www.google.com/maps/dir/?api=1&origin=` +
+      crntlatLong?.latitude +
+      `,` +
+      crntlatLong?.longitude +
+      `&destination=` +
+      desLat +
+      `,` +
+      desLong +
+      `&travelmode=driving`;
+    if ((crntlatLong?.latitude, crntlatLong?.longitude)) Linking.openURL(url);
   };
 
   const dialCall = () => {
@@ -80,30 +145,51 @@ const OrderDetailsScreen = ({navigation}) => {
   };
 
   const handleCurrentLocation = () => {
-    location = RNLocation.subscribeToLocationUpdates(location => {
-      // console.log('handleCurrentLocation ==>', location)
-      setCrntlatLong(location);
-    });
+    Geolocation.getCurrentPosition(
+      position => {
+        setCrntlatLong(position?.coords);
+        console.log(position?.coords);
+      },
+      error => {
+        console.log(error.code, error.message);
+      },
+      {
+        // enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000,
+        accuracy: {
+          android: 'high',
+          ios: 'best',
+        },
+        // forceRequestLocation: true,
+        // forceLocationManager: true
+      },
+    );
+    // location = RNLocation.subscribeToLocationUpdates(location => {
+    //   setCrntlatLong(location);
+    // });
     // setCurrentLocation(location)
     // return location
   };
 
   const handlePermission = () => {
     RNLocation.configure({
-      distanceFilter: 1, // Meters
+      distanceFilter: 100, // Meters
       desiredAccuracy: {
         ios: 'best',
         android: 'balancedPowerAccuracy',
       },
       // Android only
-      androidProvider: 'auto',
+      // androidProvider: 'auto',
+      androidProvider: 'standard',
       interval: 5000, // Milliseconds
       fastestInterval: 10000, // Milliseconds
       maxWaitTime: 5000, // Milliseconds
     });
 
     RNLocation.requestPermission({
-      ios: 'whenInUse',
+      // ios: 'whenInUse',
+      ios: 'always',
       android: {
         detail: 'fine',
         rationale: {
@@ -126,6 +212,60 @@ const OrderDetailsScreen = ({navigation}) => {
     });
   };
 
+  const updateLocalUser = data => {
+    dispatch(userLogIn(data));
+  };
+
+  const handleCancelOrder = () => {
+    const req = {};
+    req.id = data?.id;
+    req.order_status_id = 'CANCELLED';
+
+    driverUpdateStatus(req, user, user?.access_token, updateLocalUser)
+      .then(res => {
+        if (res?.success) {
+          alert('Cancel Order Successfully!');
+        } else {
+          Alert.alert('Error', res?.error_message, [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+      })
+      .catch(e => {
+        console.log('error API', e);
+      });
+  };
+
+  const handleDeliveredOrder = () => {
+    const req = {};
+    req.id = data?.id;
+    req.order_status_id = 'DELIVERED';
+
+    driverUpdateStatus(req, user, user?.access_token, updateLocalUser)
+      .then(res => {
+        if (res?.success) {
+          alert('Order Delivered Successfully!');
+        } else {
+          Alert.alert('Error', res?.error_message, [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+      })
+      .catch(e => {
+        console.log('error API', e);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <View style={[styles.topModal]}>
@@ -133,12 +273,15 @@ const OrderDetailsScreen = ({navigation}) => {
           headerText="Order Details"
           headerRight="Cancel Delivery"
           navigation={navigation}
+          onPress={handleCancelOrder}
         />
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>
-            Order # GM2D36-51
+            Order # {data?.id}
           </Text>
-          <Text style={[{color: COLORS.gray}, FONTS.small]}>5 mins ago</Text>
+          <Text style={[{color: COLORS.gray}, FONTS.small]}>
+            {data?.created_at}
+          </Text>
         </View>
         <View
           style={{
@@ -169,7 +312,8 @@ const OrderDetailsScreen = ({navigation}) => {
           </Text>
           <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>{`|`}</Text>
           <Text style={[{color: COLORS.black}, FONTS.bodyBold]}>
-            {`06:30PM`}
+            {/* {`06:30PM`} */}
+            {data?.estimated_delivery_at}
           </Text>
         </View>
         <View style={{flexDirection: 'row'}}>
@@ -188,7 +332,7 @@ const OrderDetailsScreen = ({navigation}) => {
             }}>
             <Text
               style={[{color: COLORS.black, marginTop: 10}, FONTS.bodyMedium]}>
-              Mohammad Saifuddin
+              {data?.delivery_name}
             </Text>
             <View
               style={{
@@ -197,7 +341,12 @@ const OrderDetailsScreen = ({navigation}) => {
               }}>
               {/* <MapLocator /> */}
               <Text style={[{color: COLORS.gray, marginTop: 10}, FONTS.small]}>
-                Harvest Group, DITF Bangladesh 14 Pavilion Golen, Dhaka-1212
+                {/* Harvest Group, DITF Bangladesh 14 Pavilion Golen, Dhaka-1212 */}
+                {data?.delivery_apartment +
+                  data?.delivery_floor +
+                  data?.delivery_address1 +
+                  data?.delivery_address2 +
+                  data?.delivery_postal_code}
               </Text>
             </View>
             <TouchableOpacity
@@ -210,18 +359,18 @@ const OrderDetailsScreen = ({navigation}) => {
                 borderRadius: 9,
                 paddingHorizontal: 10,
                 width: width * 0.35,
-                paddingVertical:8
+                paddingVertical: 8,
               }}>
               <Phone color={COLORS.whitePure} />
               <Text
                 style={[
                   {
                     color: COLORS.whitePure,
-                    marginLeft:3
+                    marginLeft: 3,
                   },
                   FONTS.smallBold,
                 ]}>
-                01756 236 365
+                {data?.delivery_phone_number}
               </Text>
             </TouchableOpacity>
           </View>
@@ -250,6 +399,7 @@ const OrderDetailsScreen = ({navigation}) => {
             />
           </View>
         </View>
+
         <View
           style={{
             borderBottomWidth: 1,
@@ -257,18 +407,32 @@ const OrderDetailsScreen = ({navigation}) => {
             marginTop: 17,
           }}
         />
-        <Text style={{marginTop: 10, ...FONTS.small, color: COLORS.gray}}>
-          Special Instruction
-        </Text>
-        <Text style={{marginTop: 3, ...FONTS.body, color: COLORS.black50}}>
-          Ask the security guard for Mr. Naim
-        </Text>
+
+        {data?.delivery_instruction && (
+          <>
+            <Text style={{marginTop: 10, ...FONTS.small, color: COLORS.gray}}>
+              Special Instruction
+            </Text>
+            <Text style={{marginTop: 3, ...FONTS.body, color: COLORS.black50}}>
+              {/* Ask the security guard for Mr. Naim */}
+              {data?.delivery_instruction}
+            </Text>
+          </>
+        )}
       </View>
 
       <MapView
         style={styles.mapStyle}
+        ref={refMap}
         provider="google"
         initialRegion={latLong}
+        // initialRegion={{
+        //   latitude: 23.781634584964543,
+        //   longitude: 90.3752835692889,
+        //   latitudeDelta: 0.006,
+        //   longitudeDelta: 0.006,
+        // }}
+        loadingEnabled={false}
         showsMyLocationButton={true}
         showsUserLocation={true}>
         <Marker
@@ -310,23 +474,34 @@ const OrderDetailsScreen = ({navigation}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             backgroundColor: COLORS.lightGray10,
-            paddingHorizontal:10
+            paddingHorizontal: 10,
           }}>
           <View style={styles.cards}>
             <Text style={[{color: COLORS.gray}, FONTS.small]}>Sub-Total</Text>
-            <Text style={[{color: COLORS.black}, FONTS.header3]}>৳ 630</Text>
-          </View>
-          <VerticalLine />
-          <View style={styles.cards}>
-            <Text style={[{color: COLORS.gray}, FONTS.small]}>
-              Shipping
+            <Text style={[{color: COLORS.black}, FONTS.header3]}>
+              ৳ {data?.sub_total}
             </Text>
-            <Text style={[{color: COLORS.black}, FONTS.header3]}>৳ 30</Text>
           </View>
           <VerticalLine />
           <View style={styles.cards}>
-            <Text style={[{color: COLORS.gray, textAlign:'right'}, FONTS.small]}>Receivable</Text>
-            <Text style={[{color: COLORS.primary, textAlign:'right'}, FONTS.header3]}>৳ 660</Text>
+            <Text style={[{color: COLORS.gray}, FONTS.small]}>Shipping</Text>
+            <Text style={[{color: COLORS.black}, FONTS.header3]}>
+              ৳ {data?.shipping_total}
+            </Text>
+          </View>
+          <VerticalLine />
+          <View style={styles.cards}>
+            <Text
+              style={[{color: COLORS.gray, textAlign: 'right'}, FONTS.small]}>
+              Receivable
+            </Text>
+            <Text
+              style={[
+                {color: COLORS.primary, textAlign: 'right'},
+                FONTS.header3,
+              ]}>
+              ৳ {Number(data?.sub_total) + Number(data?.shipping_total)}
+            </Text>
           </View>
         </View>
         <HorizontalLine />
@@ -377,7 +552,9 @@ const OrderDetailsScreen = ({navigation}) => {
             justifyContent: 'space-evenly',
           }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('PartyOrderScreen')}
+            onPress={() =>
+              navigation.navigate('PartyOrderScreen', {data: data})
+            }
             style={{
               // height: 58,
               width: '55%',
@@ -389,10 +566,11 @@ const OrderDetailsScreen = ({navigation}) => {
               backgroundColor: '#FFF8B9',
             }}>
             <Text style={[{color: '#795700'}, FONTS.buttonLarge]}>
-              Partly Return
+              Partly Delivered
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => handleDeliveredOrder()}
             style={{
               height: 58,
               width: '35%',

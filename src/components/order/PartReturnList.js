@@ -13,9 +13,6 @@ const PartReturnList = ({data}) => {
   const [productQty, setProductQty] = useState(0);
 
 
-    
-
-
   const handleItemPress = (item, index) => {
     setProductQty(item?.qty)
     if (expandedKey === null) {

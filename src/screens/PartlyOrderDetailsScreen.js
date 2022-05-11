@@ -2,26 +2,121 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import HeaderText from '../components/header/HeaderText';
 import PartReturnList from '../components/order/PartReturnList';
+import { driverUpdateStatus } from '../services/sales-order/salesOrder';
 import {COLORS, FONTS} from '../styles/theme';
+import {useDispatch, useSelector} from 'react-redux';
 
 
-const data = [
-  {
-    id:1, 
-    name: 'Maggi Fried Rice Seasoning 6 gm',
-    qty:3,
-    umo:'pcs'
-  },
-  {
-    id:2, 
-    name: 'Romania Coconut Milk Biscuit 60 gm',
-    qty:2,
-    umo:'pcs'
-  },
-]
+// const data = [
+//   {
+//     id:1, 
+//     name: 'Maggi Fried Rice Seasoning 6 gm',
+//     qty:3,
+//     umo:'pcs'
+//   },
+//   {
+//     id:2, 
+//     name: 'Romania Coconut Milk Biscuit 60 gm',
+//     qty:2,
+//     umo:'pcs'
+//   },
+// ]
 
-const PartlyOrderDetailsScreen = ({navigation}) => {
-  let temp = data.map((e)=>({...e, preQty : e.qty}))
+const PartlyOrderDetailsScreen = ({navigation, route}) => {
+
+  const {data} = route.params;
+
+  const {user} = useSelector(e => e.userState);
+
+  const dispatch = useDispatch();
+
+  const updateLocalUser = data => {
+    dispatch(userLogIn(data));
+  };
+
+  console.log('-------->', data);
+
+
+  const handlePartlyOrder =()=>{
+    // navigation.navigate('FinishScreen')
+    const req = {};
+    req.id = data?.id;
+    req.order_status_id = 'PARTLY_DELIVERED';
+
+    driverUpdateStatus(req, user, user?.access_token, updateLocalUser)
+      .then(res => {
+        if (res?.success) {
+          // alert('Cancel Order Successfully!');
+          navigation.navigate('FinishScreen')
+        } else {
+          Alert.alert('Error', res?.error_message, [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+      })
+      .catch(e => {
+        console.log('error API', e);
+      });
+  }
+
+  // let temp = data.map((e)=>({...e, preQty : e.qty}));
+
+
+  const handleRejectOrder =()=>{
+    const req = {};
+    req.id = data?.id;
+    req.order_status_id = 'CANCELLED';
+
+    driverUpdateStatus(req, user, user?.access_token, updateLocalUser)
+      .then(res => {
+        if (res?.success) {
+          alert('Cancel Order Successfully!');
+        } else {
+          Alert.alert('Error', res?.error_message, [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+      })
+      .catch(e => {
+        console.log('error API', e);
+      });
+  }
+
+  const handleDeliveredOrder =()=>{
+    const req = {};
+    req.id = data?.id;
+    req.order_status_id = 'DELIVERED';
+
+    driverUpdateStatus(req, user, user?.access_token, updateLocalUser)
+      .then(res => {
+        if (res?.success) {
+          alert('Order Delivered Successfully!');
+        } else {
+          Alert.alert('Error', res?.error_message, [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+      })
+      .catch(e => {
+        console.log('error API', e);
+      });
+  }
+
   return (
     <View style={styles.container}>
       <View style={{marginHorizontal: 10}}>
@@ -29,6 +124,7 @@ const PartlyOrderDetailsScreen = ({navigation}) => {
           headerText="Order Details"
           headerRight="Rejected"
           navigation={navigation}
+          onPress={handleRejectOrder}
         />
       </View>
 
@@ -40,7 +136,7 @@ const PartlyOrderDetailsScreen = ({navigation}) => {
           marginTop:15
         }}>
         <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>
-          Order # GM2D36-51
+          Order # {data?.id}
         </Text>
         <Text style={[{color: COLORS.gray}, FONTS.small]}>3 items</Text>
       </View>
@@ -62,7 +158,7 @@ const PartlyOrderDetailsScreen = ({navigation}) => {
         }}>
         Items ordered
       </Text>
-      <PartReturnList data={temp}/>
+      <PartReturnList data={data?.items}/>
       {/* <View>
         <View style={{flexDirection: 'row'}}>
           <Text>Maggi Fried Rice Seasoning 6 gm</Text>
@@ -87,7 +183,7 @@ const PartlyOrderDetailsScreen = ({navigation}) => {
           marginHorizontal: 20,
         }}>
         <Text style={{...FONTS.body, color: COLORS.black}}>Sub Total</Text>
-        <Text style={{color: COLORS.black, ...FONTS.bodyBold}}>৳ 234</Text>
+        <Text style={{color: COLORS.black, ...FONTS.bodyBold}}>৳ {data?.sub_total}</Text>
       </View>
       <View
         style={{
@@ -97,9 +193,9 @@ const PartlyOrderDetailsScreen = ({navigation}) => {
           marginHorizontal: 20,
         }}>
         <Text style={{...FONTS.body, color: COLORS.black}}>
-          Delivery charge
+          Shipping
         </Text>
-        <Text style={{color: COLORS.black, ...FONTS.bodyBold}}>৳ 29</Text>
+        <Text style={{color: COLORS.black, ...FONTS.bodyBold}}>৳ {data?.shipping_total}</Text>
       </View>
       <View
         style={{
@@ -192,7 +288,7 @@ const PartlyOrderDetailsScreen = ({navigation}) => {
             justifyContent: 'space-evenly',
           }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('FinishScreen')}
+            onPress={() => handlePartlyOrder()}
             style={{
               // height: 58,
               width: '55%',
@@ -208,6 +304,8 @@ const PartlyOrderDetailsScreen = ({navigation}) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+
+            onPress={()=> handleDeliveredOrder()}
             style={{
               height: 58,
               width: '35%',
