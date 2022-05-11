@@ -122,7 +122,7 @@ const PartlyOrderDetailsScreen = ({navigation, route}) => {
       <View style={{marginHorizontal: 10}}>
         <HeaderText
           headerText="Order Details"
-          headerRight="Rejected"
+          headerRight="Cancel Delivery"
           navigation={navigation}
           onPress={handleRejectOrder}
         />

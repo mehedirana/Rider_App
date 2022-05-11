@@ -1,14 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import LeftArrow from '../../assets/images/svg/LeftArrow';
 import { NotificationIcon } from '../../assets/images/svg/NotificationIcon';
 import { COLORS, FONTS } from '../../styles/theme';
 
-const OpenOrderHeader = () => {
+const OpenOrderHeader = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity onPress={()=> navigation.goBack()}>
         <LeftArrow color={COLORS.blackSolid} />
+        </TouchableOpacity>
+        
         <Text style={[{ color: COLORS.blackSolid, marginLeft: 24 }, FONTS.header4]}>Open Orders</Text>
       </View>
       <NotificationIcon />

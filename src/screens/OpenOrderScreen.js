@@ -7,6 +7,7 @@ import {ordersData} from '../dummy-data/rawData';
 import {getDriverOrder} from '../services/sales-order/salesOrder';
 import {COLORS} from '../styles/theme';
 import {userLogIn} from '../store/auth/userAction';
+import {OrderFilterList} from '../components/home/OrderFilterList';
 
 const OpenOrderScreen = ({navigation}) => {
   const [data, setdata] = useState([]);
@@ -19,20 +20,24 @@ const OpenOrderScreen = ({navigation}) => {
     dispatch(userLogIn(data));
   };
 
+  const childToParent =(e)=>{
+
+  }
+
   useEffect(() => {
     getDriverOrder(user, user?.access_token, updateLocalUser)
       .then(res => {
         if (res.success) {
           setdata(res?.data?.orders);
         } else {
-          Alert.alert("Error", res?.error_message,[
+          Alert.alert('Error', res?.error_message, [
             {
               text: 'Cancel',
               onPress: () => console.log('Cancel Pressed'),
               style: 'cancel',
             },
-            {text: 'OK', onPress: () => console.log('OK Pressed')}
-          ])
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
         }
       })
       .catch(e => {
@@ -42,10 +47,13 @@ const OpenOrderScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.conatainer}>
-      <OpenOrderHeader />
+      <OpenOrderHeader navigation={navigation} />
+      <View style={{ marginTop:10}}>
+        <OrderFilterList childToParent={childToParent} />
+      </View>
 
       <View style={styles.orderList}>
-        {data?.length > 0 && <OrderLists navigation={navigation} data={data} />}
+        {data?.length > 0 && <OrderLists navigation={navigation} data={data}  />}
       </View>
     </SafeAreaView>
   );

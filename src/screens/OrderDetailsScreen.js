@@ -24,6 +24,7 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 import {driverUpdateStatus} from '../services/sales-order/salesOrder';
 import {useDispatch, useSelector} from 'react-redux';
 import Geolocation from 'react-native-geolocation-service';
+import { formatedTime } from '../utils/timeFormate';
 
 const {height, width} = Dimensions.get('window');
 
@@ -280,7 +281,7 @@ const OrderDetailsScreen = ({navigation, route}) => {
             Order # {data?.id}
           </Text>
           <Text style={[{color: COLORS.gray}, FONTS.small]}>
-            {data?.created_at}
+            {formatedTime(data?.created_at)}
           </Text>
         </View>
         <View
@@ -313,7 +314,7 @@ const OrderDetailsScreen = ({navigation, route}) => {
           <Text style={[{color: COLORS.black}, FONTS.bodyMedium]}>{`|`}</Text>
           <Text style={[{color: COLORS.black}, FONTS.bodyBold]}>
             {/* {`06:30PM`} */}
-            {data?.estimated_delivery_at}
+            {formatedTime(data?.estimated_delivery_at)}
           </Text>
         </View>
         <View style={{flexDirection: 'row'}}>
