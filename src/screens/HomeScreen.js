@@ -56,7 +56,6 @@ const HomeScreen = () => {
       });
   }, []);
 
-  console.log(user?.user_data);
 
   return (
     <ScrollView style={styles.container}>
