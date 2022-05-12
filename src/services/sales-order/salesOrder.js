@@ -3,7 +3,7 @@ import {refreshToken} from '../admin';
 
 const {SALES_ORDER_URL} = envVariables;
 
-export const getDriverOrder = async (user, token, dispatchFunc) => {
+export const getDriverOrder = async (user, token, dispatchFunc, orderFilter) => {
   try {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -14,7 +14,7 @@ export const getDriverOrder = async (user, token, dispatchFunc) => {
       headers: headers,
     };
 
-    let url = `${SALES_ORDER_URL}/orders/driver`;
+    let url = `${SALES_ORDER_URL}/orders/driver?page=1&filter=${orderFilter?.filter}`;
 
     const response = await fetch(url, requestOptions);
     const json = await response.json();
