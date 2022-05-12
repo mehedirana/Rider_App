@@ -63,7 +63,11 @@ const OrderLists = ({navigation, data}) => {
   };
 
   const handleCancelOrder = item => {
+    const req = {};
+    req.id = item?.id;
+    req.driver_accepted = false;
     driverAcceptOrRejectOrder(req, user, user?.access_token, updateLocalUser).then(res => {
+      console.log(res);
       if (res?.success) {
         Alert.alert('Error', res?.error_message, [
           {
