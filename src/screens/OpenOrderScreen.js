@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, SafeAreaView, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import OpenOrderHeader from '../components/header/OpenOrderHeader';
 import OrderLists from '../components/order/OrderLists';
@@ -9,8 +17,12 @@ import {COLORS} from '../styles/theme';
 import {userLogIn} from '../store/auth/userAction';
 import {OrderFilterList} from '../components/home/OrderFilterList';
 
+const {height, width} = Dimensions.get('window');
+
 const OpenOrderScreen = ({navigation}) => {
   const [data, setdata] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [orderFilter, setOrderFilter] = useState({id: 1, name: 'Open', filter: 'open'})
 
   const {user} = useSelector(e => e.userState);
 
@@ -20,16 +32,19 @@ const OpenOrderScreen = ({navigation}) => {
     dispatch(userLogIn(data));
   };
 
-  const childToParent =(e)=>{
-
-  }
+  const childToParent = e => {
+    setOrderFilter(e)
+  };
 
   useEffect(() => {
-    getDriverOrder(user, user?.access_token, updateLocalUser)
+    // setLoading(true);
+    getDriverOrder(user, user?.access_token, updateLocalUser, orderFilter)
       .then(res => {
         if (res.success) {
           setdata(res?.data?.orders);
+          setLoading(false);
         } else {
+          setLoading(false);
           Alert.alert('Error', res?.error_message, [
             {
               text: 'Cancel',
@@ -43,18 +58,34 @@ const OpenOrderScreen = ({navigation}) => {
       .catch(e => {
         console.log('error API', e);
       });
-  }, []);
+  }, [orderFilter]);
 
   return (
     <SafeAreaView style={styles.conatainer}>
       <OpenOrderHeader navigation={navigation} />
-      <View style={{ marginTop:20}}>
-        <OrderFilterList childToParent={childToParent} />
-      </View>
+      {
+        <>
+          {loading ? (
+            <ActivityIndicator
+              style={{marginTop: height * 0.35}}
+              size={80}
+              color={COLORS.primary}
+            />
+          ) : (
+            <>
+              <View style={{marginTop: 20}}>
+                <OrderFilterList childToParent={childToParent} />
+              </View>
 
-      <View style={styles.orderList}>
-        {data?.length > 0 && <OrderLists navigation={navigation} data={data}  />}
-      </View>
+              <View style={styles.orderList}>
+                {data?.length > 0 && (
+                  <OrderLists navigation={navigation} data={data} />
+                )}
+              </View>
+            </>
+          )}
+        </>
+      }
     </SafeAreaView>
   );
 };

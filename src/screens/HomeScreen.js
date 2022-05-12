@@ -89,14 +89,14 @@ const HomeScreen = () => {
         style={{flexDirection: 'row', justifyContent: 'center', marginTop: 42}}>
         <HomeCard
           title={'Accepted'}
-          subTitle={`${data?.open_today} orders accepted today `}
+          subTitle={`${data?.accepted_today} orders accepted today `}
           subTitleColor={'#009E36'}
           style={{backgroundColor: '#E2FFED', width: '40%'}}
           type={1}
         />
         <HomeCard
           title={'Decline'}
-          subTitle={`${data?.delivered_today} orders declined today`}
+          subTitle={`${data?.rejected_today} orders declined today`}
           subTitleColor={'#CC1B16'}
           style={{backgroundColor: '#ffe9e0', marginLeft: 20}}
           type={2}

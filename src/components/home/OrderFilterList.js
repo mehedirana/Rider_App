@@ -3,17 +3,18 @@ import {View, Text, FlatList, TouchableOpacity} from 'react-native';
 import {COLORS} from '../../styles/theme';
 
 const data = [
-  {id: 1, name: 'Open', order_status_id: 'NEW'},
-  {id: 2, name: 'All Orders'},
-  {id: 3, name: 'Accepted Order'},
-  {id: 4, name: 'Cancelled', order_status_id: 'CANCELLED'},
-  {id: 5, name: 'Delivered Order', order_status_id: 'PARTLY_DELIVERED'},
-  {id: 6, name: 'Recent', order_status_id: 'PARTLY_DELIVERED'},
+  {id: 1, name: 'Open', filter: 'open'},
+  {id: 2, name: 'All Orders',filter: 'all'},
+  {id: 3, name: 'Accepted Order',filter: 'NEW'},
+  {id: 4, name: 'Cancelled', filter: 'CANCELLED'},
+  {id: 5, name: 'Delivered Order', filter: 'PARTLY_DELIVERED'},
+  {id: 6, name: 'Recent', filter: 'recent'},
 ];
 
 export const OrderFilterList = ({childToParent}) => {
-  const [expandedKey, setExpandedKey] = useState(null);
+  const [expandedKey, setExpandedKey] = useState(0);
   const handleItemPress = (item, index) => {
+    childToParent(item ? item : data[0])
     if (expandedKey === null) {
       setExpandedKey(index);
     } else {
