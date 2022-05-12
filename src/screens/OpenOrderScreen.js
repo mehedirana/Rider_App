@@ -48,7 +48,7 @@ const OpenOrderScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.conatainer}>
       <OpenOrderHeader navigation={navigation} />
-      <View style={{ marginTop:10}}>
+      <View style={{ marginTop:20}}>
         <OrderFilterList childToParent={childToParent} />
       </View>
 

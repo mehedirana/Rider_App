@@ -62,7 +62,40 @@ const OrderLists = ({navigation, data}) => {
     // navigation.navigate('OrderDetails');
   };
 
-  const handleCancelOrder = item => {};
+  const handleCancelOrder = item => {
+    const req = {};
+    req.id = item?.id;
+    req.driver_accepted = false;
+    driverAcceptOrRejectOrder(req, user, user?.access_token, updateLocalUser).then(res => {
+      console.log(res);
+      if (res?.success) {
+        Alert.alert('Error', res?.error_message, [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('You successfully decline this order'),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ]);
+   
+  
+      } else {
+        Alert.alert('Error', res?.error_message, [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ]);
+
+      }
+    })
+    .catch(e => {
+      console.log('error API', e, req);
+    });
+
+  };
 
   const RenderAllOrdersList = ({item, index}) => {
     // console.log(item);
@@ -101,8 +134,8 @@ const OrderLists = ({navigation, data}) => {
 
         <View style={styles.placeHolderContainer} />
         <View style={styles.footerContainer}>
-          <TouchableOpacity onPress={() => handleCancelOrder(item)}>
-            <Text style={[FONTS.bodyParagraphBold, {color: COLORS.red}]}>
+          <TouchableOpacity style={{justifyContent:'center'}} onPress={() => handleCancelOrder(item)}>
+            <Text style={[FONTS.bodyParagraphBold, {color: COLORS.red,}]}>
               DECLINE
             </Text>
           </TouchableOpacity>
@@ -185,7 +218,7 @@ const styles = StyleSheet.create({
   placeHolderContainer: {
     borderBottomColor: COLORS.lightGray50,
     borderBottomWidth: 1,
-    marginVertical: 17,
+    marginVertical: 10,
     // marginTop: 10,
   },
 

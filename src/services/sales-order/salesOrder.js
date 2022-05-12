@@ -89,10 +89,10 @@ export const driverAcceptOrRejectOrder = async (
 
     const response = await fetch(url, requestOptions);
     const json = await response.json();
-
-    if (json.success) {
+   console.log(json);
+    if (json?.success) {
       return json;
-    } else if (json.error_code == 'unauthorized') {
+    } else if (json?.error_code == 'unauthorized') {
       try {
         const ref_data = {
           refresh_token: user?.refresh_token,

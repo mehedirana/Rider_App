@@ -53,8 +53,9 @@ export const refreshToken = async (data) => {
             body: JSON.stringify(data)
         };
 
-        const response = await fetch(`${ADMIN_URL}/admin/token/refresh`, requestOptions);
+        const response = await fetch(`${ADMIN_URL}/token/refresh`, requestOptions);
         const json = await response.json();
+        console.log(data,'kkkkkkkkkkkkkkk',json);
         return json;
 
     } catch (e) {
