@@ -6,13 +6,14 @@ import {
   ImageBackground,
   Dimensions,
   Alert,
-
+  Image,
 } from 'react-native';
 import {NotificationIcon} from '../assets/images/svg/NotificationIcon';
 import HomeCard from '../components/home/HomeCard';
 import {COLORS, FONTS} from '../styles/theme';
 import {getStats} from '../services/sales-order/salesOrder';
 import {useDispatch, useSelector} from 'react-redux';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const backgroundImg = require('../assets/images/cityBackground.png');
 
@@ -53,11 +54,12 @@ const HomeScreen = () => {
       .catch(e => {
         console.log('error API', e);
       });
-
   }, []);
 
+  console.log(user?.user_data);
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View
         style={{
           marginTop: 29,
@@ -66,11 +68,17 @@ const HomeScreen = () => {
         }}>
         <View
           style={{
-            backgroundColor: COLORS.gray,
-            height: 65,
-            width: 65,
-            borderRadius: 40,
-          }}></View>
+            // backgroundColor: COLORS.gray,
+            // height: 65,
+            // width: 65,
+            // borderRadius: 40,
+            marginTop:40
+          }}>
+          <Image
+            style={{resizeMode: 'contain', height: 65, width: 65,borderRadius: 30,overflow:'visible'}}
+            source={{uri: user?.user_data?.image_url}}
+          />
+        </View>
         <View style={{marginTop: 10}}>
           <NotificationIcon />
         </View>
@@ -85,17 +93,36 @@ const HomeScreen = () => {
       <View
         style={{flexDirection: 'row', justifyContent: 'center', marginTop: 42}}>
         <HomeCard
-          title={'Open'}
-          subTitle={`${data?.open_today} orders waiting to be delivered `}
+          title={'Accepted'}
+          subTitle={`${data?.open_today} orders accepted today `}
           subTitleColor={'#009E36'}
           style={{backgroundColor: '#E2FFED', width: '40%'}}
           type={1}
         />
         <HomeCard
+          title={'Decline'}
+          subTitle={`${data?.delivered_today} orders declined today`}
+          subTitleColor={'#CC1B16'}
+          style={{backgroundColor: '#ffe9e0', marginLeft: 20}}
+          type={2}
+        />
+      </View>
+      <View
+        style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
+        <HomeCard
+          title={'Open'}
+          subTitle={`${data?.open_today} orders waiting to be delivered `}
+          // subTitleColor={'#009E36'}
+          // style={{backgroundColor: '#E2FFED', width: '40%'}}
+          subTitleColor={'#0050B8'}
+          style={{backgroundColor: '#E2F5FF', width: '40%'}}
+          type={1}
+        />
+        <HomeCard
           title={'Recent'}
           subTitle={`${data?.delivered_today} recently delivered`}
-          subTitleColor={'#0050B8'}
-          style={{backgroundColor: '#E2F5FF', marginLeft: 20}}
+          subTitleColor={'#390757'}
+          style={{backgroundColor: '#f7e8ff', marginLeft: 20}}
           type={2}
         />
       </View>
@@ -116,17 +143,8 @@ const HomeScreen = () => {
           type={4}
         />
       </View>
-      <ImageBackground
-        style={{
-          height: height / 2.2,
-          width: width,
-          position: 'absolute',
-          bottom: 0,
-          right: 0,
-          left: 0,
-        }}
-        source={backgroundImg}></ImageBackground>
-    </View>
+
+    </ScrollView>
   );
 };
 

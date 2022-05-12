@@ -13,24 +13,17 @@ const HomeCard = ({title, subTitle, subTitleColor, style, type}) => {
         style,
         {
           paddingHorizontal: 20,
-          paddingBottom: 16,
+          paddingBottom: 20,
           borderRadius: 9,
           width: '45%',
           zIndex: 9999,
+          
         },
       ]}>
-      <View style={{ alignItems:'flex-end', marginTop:11}}>
-        {type === 1 ? (
-          <CardIcon1 />
-        ) : type === 2 ? (
-          <CardIcon2 />
-        ) : type === 3 ? (
-          <CardIcon3 />
-        ) : (
-          <CardIcon4 />
-        )}
-      </View>
-      <Text style={{color: COLORS.blackSolid, ...FONTS.header1, marginTop: 29}}>
+      <Text style={{color: COLORS.blackSolid, ...FONTS.header1, 
+        marginTop: 20
+        // marginVertical:20
+        }}>
         {title}
       </Text>
       <Text style={{marginTop: 6, color: subTitleColor}}>{subTitle}</Text>

@@ -7,7 +7,8 @@ const data = [
   {id: 2, name: 'All Orders'},
   {id: 3, name: 'Accepted Order'},
   {id: 4, name: 'Cancelled', order_status_id: 'CANCELLED'},
-  {id: 5, name: 'Prtly Order', order_status_id: 'PARTLY_DELIVERED'},
+  {id: 5, name: 'Delivered Order', order_status_id: 'PARTLY_DELIVERED'},
+  {id: 6, name: 'Recent', order_status_id: 'PARTLY_DELIVERED'},
 ];
 
 export const OrderFilterList = ({childToParent}) => {
