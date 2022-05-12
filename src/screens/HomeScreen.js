@@ -68,10 +68,6 @@ const HomeScreen = () => {
         }}>
         <View
           style={{
-            // backgroundColor: COLORS.gray,
-            // height: 65,
-            // width: 65,
-            // borderRadius: 40,
             marginTop:40
           }}>
           <Image
