@@ -9,6 +9,7 @@ import {
   Dimensions,
   ActivityIndicator,
   Alert,
+  RefreshControl
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {driverAcceptOrRejectOrder} from '../../services/sales-order/salesOrder';
@@ -18,7 +19,7 @@ import { formatedTime } from '../../utils/timeFormate';
 
 const {height, width} = Dimensions.get('window');
 
-const OrderLists = ({navigation, data}) => {
+const OrderLists = ({navigation, data,refreshing,onRefresh}) => {
   const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -168,6 +169,9 @@ const OrderLists = ({navigation, data}) => {
         key={({item, index}) => item.orderId + index}
         ItemSeparatorComponent={() => <View style={{height: 16}} />}
         contentContainerStyle={styles.contentContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </SafeAreaView>
   );
