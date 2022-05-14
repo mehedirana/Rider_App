@@ -4,9 +4,9 @@ import LeftArrow from '../../assets/images/svg/LeftArrow';
 import {NotificationIcon} from '../../assets/images/svg/NotificationIcon';
 import {COLORS, FONTS} from '../../styles/theme';
 
-const HeaderText = ({headerText, headerRight, navigation, onPress}) => {
+const HeaderText = ({headerText, headerRight, navigation, onPress, transparent,subHeadColor}) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor: transparent ? 'transparent' :  COLORS.whitePure,}]}>
       <View
         style={{
           flexDirection: 'row',
@@ -20,7 +20,7 @@ const HeaderText = ({headerText, headerRight, navigation, onPress}) => {
         </Text>
       </View>
       <TouchableOpacity onPress={onPress}>
-        <Text style={[FONTS.inter, {color: COLORS.red}]}>
+        <Text style={[FONTS.inter, {color: subHeadColor ? subHeadColor : COLORS.red}]}>
           {headerRight ? headerRight : ''}
         </Text>
       </TouchableOpacity>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 0,
     flexDirection: 'row',
-    backgroundColor: COLORS.whitePure,
+   
     alignItems: 'center',
     zIndex: 999,
   },

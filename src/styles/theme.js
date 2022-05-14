@@ -198,6 +198,11 @@ export const FONTS = {
     fontSize: 16,
     lineHeight: 19.36,
   },
+  bodyCustom:{
+    fontFamily: 'Roboto-Regular',
+    fontSize: 17,
+    lineHeight: 24.65,
+  },
   inter: {
     fontFamily: 'Inter',
     fontSize: 15,
